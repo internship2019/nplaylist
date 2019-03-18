@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net452;net472;netcoreapp2.1</TargetFrameworks>
     <Version>0.0.0</Version>
-    <StartupObject>NPlaylist.ReadingPlaylists.Program</StartupObject>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,24 +1,49 @@
 using System;
 using System.IO;
+using System.Text;
 
 namespace NPlaylist.Models
 {
     public class M3USerializator : ISerializator<M3UPlaylist>
     {
-        public void Serialize(M3UPlaylist playlist, Stream stream)
+        private const string EXTM3U = "#EXTM3U";
+        private const string EXTINF = "#EXTINF";
+
+        public string Serialize(M3UPlaylist playlist)
         {
             if (playlist == null)
-                throw new ArgumentNullException("Empty playlist");
-
-            using (var sw = new StreamWriter(stream))
             {
-                foreach (var entry in playlist.Entries)
-                {
-
-                    sw.WriteLine(entry.Path);
-                }
+                throw new NullReferenceException("Empty playlist");
             }
-            
+
+            var sb = new StringBuilder();
+
+            if (playlist.IsExtended)
+            {
+                sb.AppendLine(EXTM3U);
+            }
+
+            foreach (var entry in playlist.Entries)
+            {
+                if (playlist.IsExtended)
+                {
+                    sb.AppendLine().Append(EXTINF+":").Append((int)entry.Duration.TotalSeconds).Append(",");
+                    if (!String.IsNullOrEmpty(entry.Artist))
+                    {
+                        sb.Append(entry.Artist).Append("-");
+                    }
+
+                    if (!String.IsNullOrEmpty(entry.Title))
+                    {
+                        sb.Append(entry.Title);
+                    }
+
+                    sb.AppendLine();
+                }
+                sb.AppendLine(entry.Path);
+            }
+            sb.Remove(sb.Length - 2, 2);
+            return sb.ToString(); 
         }
 
         public M3UPlaylist Deserialize(Stream stream)
@@ -29,48 +54,65 @@ namespace NPlaylist.Models
             }
 
             var playlist = new M3UPlaylist();
-     
-            var sr = new StreamReader(stream);
-            int lineCount = 0;
-            string line;
 
-            while((line = sr.ReadLine()) != null)
+            using (var sr = new StreamReader(stream))
             {
-                if (lineCount == 0 && line != "#EXTM3U")
-                {
-                    playlist.IsExtended = false;
-                }
+                string line;
 
-                if (!playlist.IsExtended)
+                int duration = 0;
+                string artist = "";
+                string title = "";
+                string path = "";
+
+                if (!sr.EndOfStream)
                 {
-                    if (line.StartsWith("#"))
-                        throw new ArgumentException("Wrong path format");
-                    playlist.Entries.Add(new M3UEntry()
-                        { Path = line });
-                }
-                else
-                {
-                    if (line.StartsWith("#EXTINF:"))
+                    line = sr.ReadLine();
+                    playlist.IsExtended = line.Trim() == EXTM3U ? true : false;
+                    if (!playlist.IsExtended)
                     {
-                        var split = line.Substring(8, line.Length - 8).Split(new[] { ',', '-' });
-                        if (split.Length != 3)
-                            throw new ArgumentException("Invalid track information");
-
-                        if (!int.TryParse(split[0], out var seconds))
-                            throw new ArgumentException("Invalid track duration");
-
-                        var artist = split[1];
-                        var title = split[2];
-
-                        var testingPath = sr.ReadLine();
-                        if (testingPath != null && testingPath.StartsWith("#"))
-                            throw new ArgumentException("Wrong path format");
-
                         playlist.Entries.Add(new M3UEntry()
-                            { Name = title, Artist = artist, Length = seconds, Path = testingPath });
+                        {
+                            Artist = artist,
+                            Duration = TimeSpan.FromSeconds(duration),
+                            Path = line,
+                            Title = title
+                        });
                     }
                 }
-                lineCount++;
+
+                while (!sr.EndOfStream)
+                {
+                    line = sr.ReadLine();
+                    if (!String.IsNullOrEmpty(line))
+                    {
+                        if (line.StartsWith(EXTINF) && playlist.IsExtended == true)
+                        {
+                            var info = line.Substring(8).Split(new char[] { ',', '-' });
+                            if (info != null)
+                            {
+                                int.TryParse(info[0], out duration);
+                                artist = info[1];
+                                title = info[2];
+                                path = sr.ReadLine();
+                            }
+                        }
+                        else
+                        {
+                            duration = 0;
+                            artist = "";
+                            title = "";
+                            path = line;
+                        }
+
+                        playlist.Entries.Add(new M3UEntry()
+                        {
+                            Artist = artist,
+                            Duration = TimeSpan.FromSeconds(duration),
+                            Path = path,
+                            Title = title
+                        });
+                    }
+                }
             }
 
             return playlist;

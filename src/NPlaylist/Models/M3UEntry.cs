@@ -8,10 +8,9 @@ namespace NPlaylist.Models
 {
     public class M3UEntry
     {
-        public string Name { get; set; }
+        public TimeSpan Duration { get; set; }
         public string Artist { get; set; }
-        public int Length { get; set; }
-        public string  Path { get; set; }
-      
+        public string Title { get; set; }
+        public string Path { get; set; }
     }
 }

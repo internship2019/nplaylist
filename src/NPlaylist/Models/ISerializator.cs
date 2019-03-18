@@ -5,7 +5,7 @@ namespace NPlaylist.Models
 {
     public interface ISerializator<T>
     {
-        void Serialize(T playlist, Stream stream);
-        T Deserialize(Stream stream, ArgumentNullException argumentNullException);
+        string Serialize(T playlist);
+        T Deserialize(Stream stream);
     }
 }
