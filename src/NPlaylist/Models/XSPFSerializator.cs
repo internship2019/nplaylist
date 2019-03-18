@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Xml;
 
@@ -13,7 +14,7 @@ namespace NPlaylist.Models
             }
         }
 
-        public XSPFPlaylist Deserialize(Stream stream)
+        public XSPFPlaylist Deserialize(Stream stream, ArgumentNullException argumentNullException)
         {
             throw new System.NotImplementedException();
         }

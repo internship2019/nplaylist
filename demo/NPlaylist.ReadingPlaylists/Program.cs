@@ -10,10 +10,11 @@ namespace NPlaylist.ReadingPlaylists
         {
             var obj = new M3USerializator();
 
-            var playlist = obj.Deserialize(new FileStream(@"C:\Users\mpodlesnov\OneDrive - ENDAVA\Desktop\Books.txt",
+            var playlist = obj.Deserialize(new FileStream(@"C:\list.m3u",
                 FileMode.Open));
             
-            using (var stream = new FileStream(@"C:\Users\mpodlesnov\OneDrive - ENDAVA\Desktop\Serialized.txt",FileMode.OpenOrCreate))
+            using (var stream = new FileStream(@"C:\Serialized.txt",
+                FileMode.OpenOrCreate))
             {
        
                 obj.Serialize(playlist,stream);

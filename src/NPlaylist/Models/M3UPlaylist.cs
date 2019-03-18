@@ -5,6 +5,11 @@ namespace NPlaylist
 {
     public class M3UPlaylist:BasePlaylist<M3UEntry>
     {
-       
+        public bool IsExtended { get; set; }
+
+        public M3UPlaylist()
+        {
+            IsExtended = true;
+        }
     }
 }
