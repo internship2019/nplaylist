@@ -4,5 +4,6 @@ namespace NPlaylist.Models
     {
         public int Version { get; set; }
         public string Xmlns { get; set; }
+        public bool IsExtended { get; set; }
     }
 }

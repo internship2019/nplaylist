@@ -48,10 +48,6 @@ namespace NPlaylist.Models
 
         public M3UPlaylist Deserialize(Stream stream)
         {
-            if (!File.Exists(stream.ToString()))
-            {
-                return null;
-            }
 
             var playlist = new M3UPlaylist();
 
@@ -67,8 +63,8 @@ namespace NPlaylist.Models
                 if (!sr.EndOfStream)
                 {
                     line = sr.ReadLine();
-                    playlist.IsExtended = line.Trim() == EXTM3U ? true : false;
-                    if (!playlist.IsExtended)
+                    playlist.IsExtended = line.Trim() == EXTM3U;
+                    if (!playlist.IsExtended && !string.IsNullOrEmpty(line))
                     {
                         playlist.Entries.Add(new M3UEntry()
                         {
@@ -83,7 +79,7 @@ namespace NPlaylist.Models
                 while (!sr.EndOfStream)
                 {
                     line = sr.ReadLine();
-                    if (!String.IsNullOrEmpty(line))
+                    if (!string.IsNullOrEmpty(line))
                     {
                         if (line.StartsWith(EXTINF) && playlist.IsExtended == true)
                         {
