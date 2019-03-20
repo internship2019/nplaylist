@@ -3,6 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net452;net472;netcoreapp2.1</TargetFrameworks>
+    <RuntimeFrameworkVersion>2.1.0</RuntimeFrameworkVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <Version>0.0.0</Version>
   </PropertyGroup>
 
