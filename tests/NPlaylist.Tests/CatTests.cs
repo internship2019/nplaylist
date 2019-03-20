@@ -8,11 +8,11 @@ namespace NPlaylist.Tests
         [Fact]
         public void Meow_Returns_ExpectedString()
         {
-            var cat = new Cat();
+            //var cat = new Cat();
 
-            var actual = cat.Meow();
+            //var actual = cat.Meow();
 
-            actual.Should().Be("Meow!");
+            //actual.Should().Be("Meow!");
         }
     }
 }
