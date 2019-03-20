@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace NPlaylist
 {
-    
         public class Cat
         {
             public string Meow()
@@ -14,5 +13,4 @@ namespace NPlaylist
                 return "Meow!";
             }
         }
-    
 }

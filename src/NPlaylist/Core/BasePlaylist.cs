@@ -15,7 +15,6 @@ namespace NPlaylist.Core
         {
             Items = new List<BaseItem>();
             Meta = new Dictionary<string, string>();
-
         }
     }
 }
