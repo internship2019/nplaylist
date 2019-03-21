@@ -7,6 +7,6 @@ namespace NPlaylist
     public interface IPlaylistItem
     {
         IDictionary<string, string> Tags { get; }
-        // string location ???
+        string Path { get; }
     }   
 }

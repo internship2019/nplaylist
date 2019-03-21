@@ -5,6 +5,7 @@ namespace NPlaylist
     public abstract class BasePlaylistItem : IPlaylistItem
     {
         public IDictionary<string, string> Tags { get; }
+        public string Path { get; }
 
         protected BasePlaylistItem()
         {

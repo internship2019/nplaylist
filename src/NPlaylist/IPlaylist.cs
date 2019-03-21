@@ -5,13 +5,16 @@ namespace NPlaylist
     public interface IPlaylist
     {
         IDictionary<string, string> Tags { get; }
-        IList<IPlaylistItem> PlaylistItems { get; }
+        IEnumerable<IPlaylistItem> GetItems();
     }
 
-    public interface IPlaylist<T> : IPlaylist where T : IPlaylistItem
+    public interface IPlaylist<T> : IPlaylist
+        where T : IPlaylistItem
     {
+        IEnumerable<T> Items { get; }
+
         void Add(T item);
+
         void Remove(T item);
-        void Update(T item);
     }
 }
