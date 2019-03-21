@@ -7,6 +7,7 @@ namespace NPlaylist.ReadingPlaylists
         private static void Main(string[] args)
         {
             Console.WriteLine(new Cat().Meow());
+            Console.WriteLine(new Cat().Meow());
         }
     }
 }
