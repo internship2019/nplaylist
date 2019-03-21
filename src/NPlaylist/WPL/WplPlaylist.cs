@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NPlaylist.WPL
 {
-    public class WplPlaylist : BasePlaylist<WplPlaylistItem>, IPlaylistItem
+    public class WplPlaylist : BasePlaylist<WplPlaylistItem>
     {
         public WplPlaylist(IPlaylist playlist)
         {

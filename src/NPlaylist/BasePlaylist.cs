@@ -5,7 +5,7 @@ namespace NPlaylist
     public abstract class BasePlaylist<T> : IPlaylist<T> where T : IPlaylistItem
     {
         public IDictionary<string, string> Tags { get; }
-        public IList<IPlaylistItem> PlaylistItems { get; }
+        public virtual IList<IPlaylistItem> PlaylistItems { get; }
 
         protected BasePlaylist()
         {

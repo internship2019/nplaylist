@@ -14,3 +14,20 @@ namespace NPlaylist.WPL
         }
     }
 }
+
+
+public static class Serializer
+{
+    public static string  Serialize()
+    {
+
+        //factory for type defining
+        return string.Empty;
+    }
+    public static string Deserialize()
+    {
+        //factory 
+        return string.Empty;
+    }
+
+}
