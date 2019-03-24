@@ -1,8 +1,6 @@
 using System;
 using System.IO;
-using AutoMapper;
-using NPlaylist.Models;
-using NPlaylist.Extensions;
+using NPlaylist.Asx;
 
 namespace NPlaylist.ReadingPlaylists
 {
@@ -10,24 +8,16 @@ namespace NPlaylist.ReadingPlaylists
     {
         private static void Main(string[] args)
         {
-            var obj = new M3USerializator();
+            var f = new AsxDeserializer();
+            var ser = new AsxSerializer();
+            using (var sr = new StreamReader(@"C:\Users\Admin\Desktop\test.txt"))
+            {
+                var str = sr.ReadToEnd();
+                var r = f.Deserialize(str);
 
-            var stream = new FileStream(@"C:\list.m3u", FileMode.Open);
-
-            var playlist = obj.Deserialize(stream);
-            
-            stream.Close();
-            Console.WriteLine("Imported {0} entries\n",playlist.Entries.Count);
-            
-            Console.WriteLine(obj.Serialize(playlist));
-
-
-            // Auto-Mapping test
-            var destination = Mapping.Mapper.Map<XSPFPlaylist>(playlist);
-
-            Console.WriteLine("Try hard: " + destination.Version + "\nNumbers: " + destination.Entries.Count);
-
-            Console.ReadLine();
+                Console.WriteLine(ser.Serialize(r));
+            }
+            Console.ReadKey();
         }
     }
 }
