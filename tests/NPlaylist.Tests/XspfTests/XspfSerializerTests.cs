@@ -11,19 +11,15 @@ namespace NPlaylist.Tests
     public class XspfSerializerTests
     {
         [Fact]
-        public void Serializer_Returns_not_empty_String()
+        public void Serialize_SerizlizerReturnsNotEmptyString_True()
         {
-            //Arrange
             var xspfSerializer = new XspfPlaylistSerializer();
             var xspfPlaylist = new XspfPlaylist
             {
                 Version = "1"
             };
-
-            //Act
             var result = xspfSerializer.Serialize(xspfPlaylist);
 
-            //Assert
             Assert.True(result != String.Empty);
         }
     }

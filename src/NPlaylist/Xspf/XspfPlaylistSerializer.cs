@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using NPlaylist.Xspf.XspfHelper;
 
 namespace NPlaylist.Xspf
 {
@@ -11,14 +12,17 @@ namespace NPlaylist.Xspf
     {
         public string Serialize(XspfPlaylist playlist)
         {
-            if (playlist == null) return String.Empty;
+            if (playlist == null)
+            {
+                throw new ArgumentNullException("playlist is null");
+            }
             var helperPlaylist = FromXspfToHelper(playlist);
             return XspfHelperToString(helperPlaylist);
         }
 
-        private string XspfHelperToString(XspfHelper.Playlist helperPlaylist)
+        private string XspfHelperToString(XspfHelperPlaylist helperPlaylist)
         {
-            var xmlSerializer = new XmlSerializer(typeof(XspfHelper.Playlist));
+            var xmlSerializer = new XmlSerializer(typeof(XspfHelperPlaylist));
             using (var stringWriter = new StringWriterWithEncoding(Encoding.UTF8))
             {
                 xmlSerializer.Serialize(stringWriter, helperPlaylist);
@@ -27,16 +31,16 @@ namespace NPlaylist.Xspf
             }
         }
 
-        private XspfHelper.Playlist FromXspfToHelper(XspfPlaylist playlist)
+        private XspfHelperPlaylist FromXspfToHelper(XspfPlaylist playlist)
         {
-            var helperPlaylist = new XspfHelper.Playlist();
+            var helperPlaylist = new XspfHelperPlaylist();
             helperPlaylist.Version = playlist.Version;
-            helperPlaylist.TrackList = new XspfHelper.TrackList();
-            helperPlaylist.TrackList.Track = new List<XspfHelper.Track>();
+            helperPlaylist.TrackList = new XspfHelperTrackList();
+            helperPlaylist.TrackList.Track = new List<XspfHelperTrack>();
 
             foreach (var xspfPlaylistItem in playlist.Items)
             {
-                helperPlaylist.TrackList.Track.Add(new XspfHelper.Track
+                helperPlaylist.TrackList.Track.Add(new XspfHelperTrack
                 {
                     Title = xspfPlaylistItem.Title,
                     Location = xspfPlaylistItem.Path

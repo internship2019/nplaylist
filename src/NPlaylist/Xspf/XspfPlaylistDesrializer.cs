@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Xml.Serialization;
+using NPlaylist.Xspf.XspfHelper;
 
 namespace NPlaylist.Xspf
 {
@@ -9,22 +10,25 @@ namespace NPlaylist.Xspf
         public XspfPlaylist Deserialize(string input)
         {
             if (input == null)
-                return new XspfPlaylist();
+            {
+                throw new ArgumentNullException("input is null");
+            }
+
             var helperPlaylist = StringToXspfHelper(input);
             return ConvertToXspfPlaylist(helperPlaylist);
         }
 
-        private XspfHelper.Playlist StringToXspfHelper(string input)
+        private XspfHelper.XspfHelperPlaylist StringToXspfHelper(string input)
         {
-            var xmlSerializer = new XmlSerializer(typeof(XspfHelper.Playlist));
+            var xmlSerializer = new XmlSerializer(typeof(XspfHelperPlaylist));
 
-            XspfHelper.Playlist xspfHelperObj;
+            XspfHelperPlaylist xspfHelperObj;
 
             using (var reader = new StringReader(input))
             {
                 try
                 {
-                    xspfHelperObj= xmlSerializer.Deserialize(reader) as XspfHelper.Playlist;
+                    xspfHelperObj= xmlSerializer.Deserialize(reader) as XspfHelperPlaylist;
                     return xspfHelperObj;
                 }
                 catch (Exception ex)
@@ -34,7 +38,7 @@ namespace NPlaylist.Xspf
             }
         }
 
-        private XspfPlaylist ConvertToXspfPlaylist(XspfHelper.Playlist playlist)
+        private XspfPlaylist ConvertToXspfPlaylist(XspfHelperPlaylist playlist)
         {
             var xspfPlaylist = new XspfPlaylist();
             xspfPlaylist.Version = playlist.Version;

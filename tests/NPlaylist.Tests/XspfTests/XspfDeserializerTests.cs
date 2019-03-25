@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NPlaylist.Xspf;
 using Xunit;
 
@@ -7,13 +8,64 @@ namespace NPlaylist.Tests
     public class XspfDeserializerTests
     {
         [Fact]
-        public void Invalid_Format_Throws_Exception()
+        public void Deserialize_InvalidPlaylistType_ExceptionThrown()
         {
-            //Arrange 
             var xspfDeserializer = new XspfPlaylistDesrializer();
 
-            //Assert
-            Assert.Throws<Exception>(()=>xspfDeserializer.Deserialize("test string"));
+            Assert.Throws<Exception>(() => xspfDeserializer.Deserialize("test string"));
+        }
+
+        [Fact]
+        public void Deserialize_CorrectVersionParsing_True()
+        {
+            var xspfDeserializer = new XspfPlaylistDesrializer();
+            string correctVersionTest =
+                "<playlist version = \"1\"  xmlns=\"http://xspf.org/ns/0/\" >  <trackList></trackList></playlist>";
+
+            var obj = xspfDeserializer.Deserialize(correctVersionTest);
+            Assert.True(obj.Version == "1");
+        }
+
+        [Fact]
+        public void Deserialize_CorectNumberOfItems_True()
+        {
+            var xspfDeserializer = new XspfPlaylistDesrializer();
+            string correctCountOfItems =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+                "<playlist  xmlns=\"http://xspf.org/ns/0/\" > " +
+                "<trackList>" +
+                "<track>" +
+                "<title>Windows Path</title>     " +
+                "<location>file:///C:/music/foo.mp3</location>    " +
+                "</track>" +
+                "<track>" +
+                "<title>Linux Path</title>" +
+                "<location>file:///media/music/foo.mp3</location>   " +
+                "</track>   " +
+                "</trackList>" +
+                "</playlist>";
+
+            var obj = xspfDeserializer.Deserialize(correctCountOfItems);
+            Assert.True(obj.Items.Count() == 2);
+        }
+
+        [Fact]
+        public void Deserialize_ItemParsedAsExpected_True()
+        {
+            var xspfDeserializer = new XspfPlaylistDesrializer();
+            string correctItemParsing =
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
+                "<playlist  xmlns=\"http://xspf.org/ns/0/\" > " +
+                "<trackList>" +
+                "<track>" +
+                "<title>Linux Path</title>" +
+                "<location>file:///media/music/foo.mp3</location>   " +
+                "</track>   " +
+                "</trackList>" +
+                "</playlist>";
+            var obj = xspfDeserializer.Deserialize(correctItemParsing);
+            
+            Assert.True(obj.Items.SingleOrDefault().Title == "Linux Path");
         }
     }
 }
