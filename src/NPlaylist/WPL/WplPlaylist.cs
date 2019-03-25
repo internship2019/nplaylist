@@ -4,14 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NPlaylist.WPL
+namespace NPlaylist.Wpl
 {
-    public class WplPlaylist : BasePlaylist<WplPlaylistItem>
+    public class WplPlaylist : BasePlaylist<WplItem>
     {
-        public WplPlaylist(IPlaylist playlist)
+        public string Title
         {
-            //TODO: parse playlist tgs
-            //TODO: add playlist items
+            get => Tags.TryGetValue(TagNames.Title, out var value) ? value : null;
+            set => Tags[TagNames.Title] = value;
+        }
+
+        public string Author
+        {
+            get => Tags.TryGetValue(TagNames.Author, out var value) ? value : null;
+            set => Tags[TagNames.Author] = value;
         }
     }
 }
