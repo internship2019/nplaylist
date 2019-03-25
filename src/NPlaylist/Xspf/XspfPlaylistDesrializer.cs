@@ -33,7 +33,7 @@ namespace NPlaylist.Xspf
                 }
                 catch (InvalidOperationException ex)
                 {
-                    throw new InvalidOperationException();
+                    throw new FormatException();
                 }
             }
         }

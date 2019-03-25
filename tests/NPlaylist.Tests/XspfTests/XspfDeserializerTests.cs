@@ -12,7 +12,7 @@ namespace NPlaylist.Tests
         {
             var xspfDeserializer = new XspfPlaylistDesrializer();
 
-            Assert.Throws<InvalidOperationException>(() => xspfDeserializer.Deserialize("test string"));
+            Assert.Throws<FormatException>(() => xspfDeserializer.Deserialize("test string"));
         }
 
         [Fact]
@@ -66,6 +66,14 @@ namespace NPlaylist.Tests
             var obj = xspfDeserializer.Deserialize(correctItemParsing);
             
             Assert.True(obj.Items.SingleOrDefault().Title == "Linux Path");
+        }
+
+        [Fact]
+        public void Deserialize_NullInputAsParameter_ArgumentNullExceptionThrown()
+        {
+            var xspfDeserializer = new XspfPlaylistDesrializer();
+           
+            Assert.Throws<ArgumentNullException>(()=> xspfDeserializer.Deserialize(null));
         }
     }
 }
