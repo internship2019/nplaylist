@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace NPlaylist.Xspf
@@ -11,29 +13,30 @@ namespace NPlaylist.Xspf
         {
             if (playlist == null) return String.Empty;
             var helperPlaylist = FromXspfToHelper(playlist);
-            return HelperToString(helperPlaylist);
+            return XspfHelperToString(helperPlaylist);
         }
 
-        private string HelperToString(XspfToXmlHelperClass.Playlist helperPlaylist)
+        private string XspfHelperToString(XspfHelper.Playlist helperPlaylist)
         {
-            var xmlSerializer = new XmlSerializer(typeof(XspfToXmlHelperClass.Playlist));
-            using (var textWriter = new StringWriter())
+            var xmlSerializer = new XmlSerializer(typeof(XspfHelper.Playlist));
+            using (var stringWriter = new StringWriterWithEncoding(Encoding.UTF8))
             {
-                xmlSerializer.Serialize(textWriter, helperPlaylist);
-                return textWriter.ToString();
+                xmlSerializer.Serialize(stringWriter, helperPlaylist);
+
+                return stringWriter.ToString();
             }
         }
 
-        private XspfToXmlHelperClass.Playlist FromXspfToHelper(XspfPlaylist playlist)
+        private XspfHelper.Playlist FromXspfToHelper(XspfPlaylist playlist)
         {
-            var helperPlaylist = new XspfToXmlHelperClass.Playlist();
-           // helperPlaylist.Xmlns = playlist.Xmlns;
+            var helperPlaylist = new XspfHelper.Playlist();
             helperPlaylist.Version = playlist.Version;
-            helperPlaylist.TrackList = new XspfToXmlHelperClass.TrackList();
-            helperPlaylist.TrackList.Track = new List<XspfToXmlHelperClass.Track>();
+            helperPlaylist.TrackList = new XspfHelper.TrackList();
+            helperPlaylist.TrackList.Track = new List<XspfHelper.Track>();
+
             foreach (var xspfPlaylistItem in playlist.Items)
             {
-                helperPlaylist.TrackList.Track.Add(new XspfToXmlHelperClass.Track
+                helperPlaylist.TrackList.Track.Add(new XspfHelper.Track
                 {
                     Title = xspfPlaylistItem.Title,
                     Location = xspfPlaylistItem.Path
@@ -41,7 +44,6 @@ namespace NPlaylist.Xspf
             }
 
             return helperPlaylist;
-
         }
     }
 }

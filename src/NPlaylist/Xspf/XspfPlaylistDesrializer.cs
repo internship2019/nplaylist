@@ -10,33 +10,35 @@ namespace NPlaylist.Xspf
         {
             if (input == null)
                 return new XspfPlaylist();
-            var helperPlaylist = ToXmlHelperClass(input);
+            var helperPlaylist = StringToXspfHelper(input);
             return ConvertToXspfPlaylist(helperPlaylist);
         }
 
-        private XspfToXmlHelperClass.Playlist ToXmlHelperClass(string input)
+        private XspfHelper.Playlist StringToXspfHelper(string input)
         {
-            var xmlSerializer = new XmlSerializer(typeof(XspfToXmlHelperClass.Playlist));
+            var xmlSerializer = new XmlSerializer(typeof(XspfHelper.Playlist));
+
+            XspfHelper.Playlist xspfHelperObj;
 
             using (var reader = new StringReader(input))
             {
                 try
                 {
-                    return xmlSerializer.Deserialize(reader) as XspfToXmlHelperClass.Playlist;
+                    xspfHelperObj= xmlSerializer.Deserialize(reader) as XspfHelper.Playlist;
+                    return xspfHelperObj;
                 }
-                catch (InvalidOperationException)
+                catch (Exception ex)
                 {
-                    throw new ArgumentNullException();
+                    throw new Exception("Something wrong with xmlSerializer.Deserialize()");
                 }
             }
         }
 
-        private XspfPlaylist ConvertToXspfPlaylist(XspfToXmlHelperClass.Playlist playlist)
+        private XspfPlaylist ConvertToXspfPlaylist(XspfHelper.Playlist playlist)
         {
             var xspfPlaylist = new XspfPlaylist();
             xspfPlaylist.Version = playlist.Version;
-            //xspfPlaylist.Xmlns = playlist.Xmlns;
-
+            
             foreach (var track in playlist.TrackList.Track)
             {
                 xspfPlaylist.Add(new XspfPlaylistItem
@@ -45,7 +47,6 @@ namespace NPlaylist.Xspf
                     Title = track.Title
                 });
             }
-
             return xspfPlaylist;
         }
     }

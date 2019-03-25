@@ -3,13 +3,14 @@ using System.Xml.Serialization;
 
 namespace NPlaylist.Xspf
 {
-    public class XspfToXmlHelperClass
+    public static class XspfHelper
     {
         [XmlRoot(ElementName = "track", Namespace = "http://xspf.org/ns/0/")]
         public class Track
         {
             [XmlElement(ElementName = "title", Namespace = "http://xspf.org/ns/0/")]
             public string Title { get; set; }
+
             [XmlElement(ElementName = "location", Namespace = "http://xspf.org/ns/0/")]
             public string Location { get; set; }
         }
@@ -26,10 +27,9 @@ namespace NPlaylist.Xspf
         {
             [XmlElement(ElementName = "trackList", Namespace = "http://xspf.org/ns/0/")]
             public TrackList TrackList { get; set; }
+
             [XmlAttribute(AttributeName = "version")]
             public string Version { get; set; }
-            //[XmlAttribute(AttributeName = "xmlns")]
-           // public string Xmlns { get; set; }
         }
     }
 }
