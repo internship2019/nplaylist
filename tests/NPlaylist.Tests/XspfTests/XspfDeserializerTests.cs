@@ -8,11 +8,11 @@ namespace NPlaylist.Tests
     public class XspfDeserializerTests
     {
         [Fact]
-        public void Deserialize_InvalidPlaylistType_ExceptionThrown()
+        public void Deserialize_InvalidPlaylistType_InvalidOperationException()
         {
             var xspfDeserializer = new XspfPlaylistDesrializer();
 
-            Assert.Throws<Exception>(() => xspfDeserializer.Deserialize("test string"));
+            Assert.Throws<InvalidOperationException>(() => xspfDeserializer.Deserialize("test string"));
         }
 
         [Fact]

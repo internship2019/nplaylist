@@ -11,7 +11,7 @@ namespace NPlaylist.Xspf
         {
             if (input == null)
             {
-                throw new ArgumentNullException("input is null");
+                throw new ArgumentNullException("Input is null");
             }
 
             var helperPlaylist = StringToXspfHelper(input);
@@ -31,9 +31,9 @@ namespace NPlaylist.Xspf
                     xspfHelperObj= xmlSerializer.Deserialize(reader) as XspfHelperPlaylist;
                     return xspfHelperObj;
                 }
-                catch (Exception ex)
+                catch (InvalidOperationException ex)
                 {
-                    throw new Exception("Something wrong with xmlSerializer.Deserialize()");
+                    throw new InvalidOperationException();
                 }
             }
         }
