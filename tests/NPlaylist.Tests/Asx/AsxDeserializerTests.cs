@@ -20,25 +20,25 @@ namespace NPlaylist.Tests.Asx
         }
 
         [Fact]
-        public void Deserialize_NullInput_ThrowsException()
+        public void Deserialize_NullInput_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize(null));
         }
 
         [Fact]
-        public void Deserialize_EmptyInput_ThrowsException()
+        public void Deserialize_EmptyInput_ThrowsArgumentException()
         {
             Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize(string.Empty));
         }
 
         [Fact]
-        public void Deserialize_IncorrectFormat_ThrowsException()
+        public void Deserialize_IncorrectFormat_ThrowsFormatException()
         {
             Assert.Throws<FormatException>(() => deserializer.Deserialize("Foo"));
         }
 
         [Fact]
-        public void Deserialize_TagIsParrsedAsExpected()
+        public void Deserialize_TagIsParsedAsExpected()
         {
             string asxWithMeta_FooToBar =
             @"
@@ -50,7 +50,7 @@ namespace NPlaylist.Tests.Asx
         }
 
         [Fact]
-        public void Deserialize_TitleIsParrsedAsExpected()
+        public void Deserialize_TitleIsParsedAsExpected()
         {
             string asxWithTitle_Foo =
             @"
@@ -64,7 +64,7 @@ namespace NPlaylist.Tests.Asx
         }
 
         [Fact]
-        public void Deserialize_VersionIsParrsedAsExpected()
+        public void Deserialize_VersionIsParsedAsExpected()
         {
             string asxWithVersion_Foo =
             @"
@@ -77,7 +77,7 @@ namespace NPlaylist.Tests.Asx
         }
 
         [Fact]
-        public void Deserialize_RefIsParrsedAsExpected()
+        public void Deserialize_RefIsParsedAsExpected()
         {
             string asxWithRef_Foo =
             @"
