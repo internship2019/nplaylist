@@ -17,8 +17,10 @@ namespace NPlaylist.Xspf
 
         public XspfPlaylist(IPlaylist playlist)
         {
-            Tags = new Dictionary<string, string>(playlist.Tags);
-            Version = Tags.TryGetValue(TagNames.Version, out var value) ? value : null;
+            foreach (var playlistTag in playlist.Tags)
+            {
+                Tags[playlistTag.Key] = playlistTag.Value;
+            }
 
             foreach (var item in playlist.GetItems())
             {

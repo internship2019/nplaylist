@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using NPlaylist.Wpl;
 using NPlaylist.Xspf;
+using NSubstitute;
 using Xunit;
 
 namespace NPlaylist.Tests.XspfTests
@@ -10,83 +12,81 @@ namespace NPlaylist.Tests.XspfTests
         [Fact]
         public void Conversion_CorrectNumberOfItemsAfterConversion_True()
         {
-            var wpl = new WplPlaylist();
-            wpl.Add(new WplItem("test1"));
-            wpl.Add(new WplItem("test2"));
-            wpl.Add(new WplItem("test3"));
+            var playlist = Substitute.For<IPlaylist>();
+            var item = Substitute.For<IPlaylistItem>();
+            playlist.GetItems().Returns(new[] {item});
 
-            var xspf = new XspfPlaylist(wpl);
+            var xspf = new XspfPlaylist(playlist);
 
-            Assert.True(wpl.GetItems().Count().Equals(xspf.GetItems().Count()));
+            Assert.True(playlist.GetItems().Count()==xspf.GetItems().Count());
         }
 
         [Fact]
         public void Conversion_ConvertedPlaylistContainsTagAuthor_True()
         {
-            var wpl = new WplPlaylist
-            {
-                Author = "TestAuthor",
-                Title = "Test Title"
-            };
+            var playlist = Substitute.For<IPlaylist>();
+            var dictionary = new Dictionary<string,string>();
+            dictionary.Add(TagNames.Author, "Value");
+            playlist.Tags.Returns(dictionary);
+         
+            var xspf = new XspfPlaylist(playlist);
 
-            var wplConvertedToXspf = new XspfPlaylist(wpl);
-
-            Assert.True(wplConvertedToXspf.Tags.ContainsKey(TagNames.Author));
+            Assert.True(xspf.Tags.ContainsKey(TagNames.Author));
         }
 
         [Fact]
         public void Conversion_ConvertedAuthorEqualsToInitialPlaylitTitle_True()
         {
-            var wpl = new WplPlaylist
-            {
-                Author = "TestAuthor",
-                Title = "Test Title"
-            };
+            var playlist = Substitute.For<IPlaylist>();
+            var dictionary = new Dictionary<string,string>();
+            dictionary.Add(TagNames.Author,"TestAuthor");
+            playlist.Tags.Returns(dictionary);
+            var xspf = new XspfPlaylist(playlist);
 
-            var wplConvertedToXspf = new XspfPlaylist(wpl);
-
-            Assert.True(wplConvertedToXspf.Tags[TagNames.Author] == "TestAuthor");
+            Assert.True(xspf.Tags[TagNames.Author] == "TestAuthor");
         }
 
         [Fact]
         public void Conversion_ConvertedTitleEqualsToInitialPlaylitTitle_True()
         {
-            var wpl = new WplPlaylist
-            {
-                Author = "TestAuthor",
-                Title = "Test Title"
-            };
+            var playlist = Substitute.For<IPlaylist>();
+            var dictionary = new Dictionary<string, string>();
+            dictionary.Add(TagNames.Title, "Test Title");
+            playlist.Tags.Returns(dictionary);
+            var xspf = new XspfPlaylist(playlist);
 
-            var wplConvertedToXspf = new XspfPlaylist(wpl);
-
-            Assert.True(wplConvertedToXspf.Tags[TagNames.Title] == "Test Title");
+            Assert.True(xspf.Tags[TagNames.Title] == "Test Title");
         }
 
         [Fact]
         public void Conversion_InitialItemLocationEqualsConverted_True()
         {
-            var wpl = new WplPlaylist();
-            wpl.Add(new WplItem("test path"));
+            var playlist = Substitute.For<IPlaylist>();
+            var item = Substitute.For<IPlaylistItem>();
+            item.Path.Returns("test path");
+            playlist.GetItems().Returns(new[] {item});
 
-            var wplConvertedToXspf = new XspfPlaylist(wpl);
-
-            var result = wplConvertedToXspf.GetItems().SingleOrDefault()?.Path;
-
-            Assert.True(result.Equals(wpl.GetItems().SingleOrDefault()?.Path));
+            var xspf = new XspfPlaylist(playlist);
+            var receivedItem = xspf.GetItems().First();
+            var a = receivedItem.Path;
+            var xspfItemPath = receivedItem.Path;
+            
+            Assert.True(xspfItemPath.Equals(playlist.GetItems().First().Path));
         }
 
         [Fact]
         public void Conversion_ItemTagsInConvertedPlaylistContainsTrackId_True()
         {
-            var wpl = new WplPlaylist();
-            wpl.Add(new WplItem("test path")
-            {
-                TrackId = "testID"
-            });
+            var playlist = Substitute.For<IPlaylist>();
+            var item = Substitute.For<IPlaylistItem>();
+            var dictionary = new Dictionary<string,string>();
+            dictionary.Add(TagNames.TrackId,"testID");
+            item.Tags.Returns(dictionary);
+            playlist.GetItems().Returns(new[] { item });
 
-            var wplConvertedToXspf = new XspfPlaylist(wpl);
+            var xspf = new XspfPlaylist(playlist);
 
-            var result = wplConvertedToXspf.GetItems().SingleOrDefault().Tags[TagNames.TrackId];
+            var result = xspf.GetItems().First().Tags[TagNames.TrackId];
             Assert.True(result.Equals("testID"));
         }
     }
