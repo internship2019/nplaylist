@@ -4,8 +4,8 @@ namespace NPlaylist.Xspf
     {
         public string Version
         {
-            get => Tags.TryGetValue(KeyNames.Version, out var value) ? value : null;
-            set => Tags[KeyNames.Version] = value;
+            get => Tags.TryGetValue(TagNames.Version, out var value) ? value : null;
+            set => Tags[TagNames.Version] = value;
         }
     }
 }

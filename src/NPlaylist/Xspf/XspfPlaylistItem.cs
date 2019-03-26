@@ -4,8 +4,12 @@ namespace NPlaylist.Xspf
     {
         public string Title
         {
-            get => Tags.TryGetValue(KeyNames.Title, out var value) ? value : null;
-            set => Tags[KeyNames.Title] = value;
+            get => Tags.TryGetValue(TagNames.Title, out var value) ? value : null;
+            set => Tags[TagNames.Title] = value;
+        }
+
+        public XspfPlaylistItem(string path) : base(path)
+        {
         }
     }
 }

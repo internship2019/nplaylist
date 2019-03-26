@@ -42,9 +42,8 @@ namespace NPlaylist.Tests.XspfTests
         public void Serialize__SerializedPlaylistContainsItemTitle_True()
         {
             var xspfPlaylist = new XspfPlaylist();
-            xspfPlaylist.Add(new XspfPlaylistItem
+            xspfPlaylist.Add(new XspfPlaylistItem("test_location")
             {
-                Path = "testpath.mp3",
                 Title = "test_element"
             });
             var xspfSerializer = new XspfPlaylistSerializer();

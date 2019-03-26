@@ -45,9 +45,8 @@ namespace NPlaylist.Xspf
             
             foreach (var track in playlist.TrackList.Track)
             {
-                xspfPlaylist.Add(new XspfPlaylistItem
+                xspfPlaylist.Add(new XspfPlaylistItem(track.Location)
                 {
-                    Path = track.Location,
                     Title = track.Title
                 });
             }
