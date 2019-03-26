@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using NPlaylist.Wpl;
 using NPlaylist.Xspf;
 using NSubstitute;
 using Xunit;
@@ -67,9 +66,7 @@ namespace NPlaylist.Tests.XspfTests
             playlist.GetItems().Returns(new[] {item});
 
             var xspf = new XspfPlaylist(playlist);
-            var receivedItem = xspf.GetItems().First();
-            var a = receivedItem.Path;
-            var xspfItemPath = receivedItem.Path;
+            var xspfItemPath = xspf.GetItems().First().Path;
             
             Assert.True(xspfItemPath.Equals(playlist.GetItems().First().Path));
         }
