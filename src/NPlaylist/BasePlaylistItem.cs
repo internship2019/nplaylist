@@ -8,13 +8,15 @@ namespace NPlaylist
 
         public string Path
         {
-            get => Tags.TryGetValue(KeyNames.Path, out var value) ? value : null;
-            set => Tags[KeyNames.Path] = value;
+            get => Tags.TryGetValue(TagNames.Path, out var value) ? value : null;
+            set => Tags[TagNames.Path] = value;
         }
 
-        protected BasePlaylistItem()
+        protected BasePlaylistItem(string path)
         {
             Tags = new Dictionary<string, string>();
+            Path = path;
         }
     }
 }
+
