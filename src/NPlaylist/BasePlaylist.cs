@@ -14,7 +14,7 @@ namespace NPlaylist
             _items = new List<T>();
         }
 
-        public IDictionary<string, string> Tags { get; }
+        public IDictionary<string, string> Tags { get; protected set; }
 
         public IEnumerable<T> Items => _items;
 
