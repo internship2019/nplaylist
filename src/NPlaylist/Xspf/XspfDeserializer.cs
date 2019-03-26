@@ -5,7 +5,7 @@ using NPlaylist.Xspf.XspfHelper;
 
 namespace NPlaylist.Xspf
 {
-    public class XspfDesrializer : IPlaylistDeserializer<XspfPlaylist>
+    public class XspfDeserializer : IPlaylistDeserializer<XspfPlaylist>
     {
         public XspfPlaylist Deserialize(string input)
         {
