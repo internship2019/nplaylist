@@ -16,5 +16,27 @@ namespace NPlaylist.Wpl.WplParts
 
         [XmlElement(ElementName = "title")]
         public string Title { get; set; }
+
+        public Head()
+        {
+        }
+
+        public Head(WplPlaylist wplPlaylist)
+        {
+            Meta = ExtractHeadMeta(wplPlaylist);
+            Author = wplPlaylist.Author;
+            Title = wplPlaylist.Title;
+        }
+
+        private static List<Meta> ExtractHeadMeta(WplPlaylist playlist)
+        {
+            return playlist
+                .Tags
+                .Where(kv =>
+                       kv.Key != TagNames.Author
+                    && kv.Key != TagNames.Title)
+                .Select(kv => new Meta { Name = kv.Key, Content = kv.Value })
+                .ToList();
+        }
     }
 }

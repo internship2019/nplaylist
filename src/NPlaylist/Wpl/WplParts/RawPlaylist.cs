@@ -10,5 +10,15 @@ namespace NPlaylist.Wpl.WplParts
 
         [XmlElement(ElementName = "body")]
         public Body Body { get; set; }
+
+        public RawPlaylist()
+        {
+        }
+
+        public RawPlaylist(WplPlaylist wplPlaylist)
+        {
+            Head = new Head(wplPlaylist);
+            Body = new Body(wplPlaylist.Items);
+        }
     }
 }

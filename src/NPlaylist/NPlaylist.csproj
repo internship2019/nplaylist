@@ -51,4 +51,7 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Wpl\WplParts\" />
+  </ItemGroup>
 </Project>
