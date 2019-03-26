@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace NPlaylist.Xspf
 {
     public class XspfPlaylistItem : BasePlaylistItem
@@ -10,6 +12,14 @@ namespace NPlaylist.Xspf
 
         public XspfPlaylistItem(string path) : base(path)
         {
+        }
+
+        public XspfPlaylistItem(IPlaylistItem item) : base(item.Path)
+        {
+            foreach (var itemTag in item.Tags)
+            {
+                Tags[itemTag.Key] = itemTag.Value;
+            }
         }
     }
 }
