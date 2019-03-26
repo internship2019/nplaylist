@@ -22,4 +22,10 @@
     <ProjectReference Include="..\..\src\NPlaylist\NPlaylist.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Wpl\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Wpl\WplItemTests.cs" />
+  </ItemGroup>
 </Project>
