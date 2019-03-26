@@ -67,7 +67,6 @@ namespace NPlaylist.Asx
         {
             var emptyNamespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
             
-
             var settings = new XmlWriterSettings
             {
                 Indent = true,

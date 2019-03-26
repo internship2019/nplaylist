@@ -62,10 +62,12 @@ namespace NPlaylist.Asx
                     Author = item.Author,
                     Copyright = item.Copyright
                 };
+
                 foreach (var itemTags in item.Param)
                 {
                     asxItem.Tags[itemTags.Name] = itemTags.Value;
                 }
+
                 playlist.Add(asxItem);
             }
         }
