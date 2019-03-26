@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.SqlServer.Server;
 using NPlaylist.Asx;
 using NSubstitute;
 using Xunit;
@@ -12,105 +13,87 @@ namespace NPlaylist.Tests.Asx
     public class AsxDeserializerTests
     {
         [Fact]
-        public void Deserialize_IncorrectFormat_ThrowsException()
+        public void Deserialize_NullInput_ThrowsException()
         {
-            // Arrange
             var deserializer = new AsxDeserializer();
 
-            // Act && Assert
-            Assert.Throws<InvalidAsxFormatException>(() => deserializer.Deserialize("Foo"));
+            Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize(null));
+        }
+
+        [Fact]
+        public void Deserialize_EmptyInput_ThrowsException()
+        {
+            var deserializer = new AsxDeserializer();
+
+            Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize(string.Empty));
+        }
+
+        [Fact]
+        public void Deserialize_IncorrectFormat_ThrowsException()
+        {
+            var deserializer = new AsxDeserializer();
+
+            Assert.Throws<FormatException>(() => deserializer.Deserialize("Foo"));
         }
 
         [Fact]
         public void Deserialize_TagIsParrsedAsExpected()
         {
-            // Arrange
+            string asxWithMeta_FooToBar =
+            @"
+                <asx />
+            ";
             var deserializer = new AsxDeserializer();
-
-            // Act
             var playlist = deserializer.Deserialize(asxWithMeta_FooToBar);
-
-            // Assert
-            Assert.True(playlist.Items.Count() == 1);
-            var asxItem = playlist.Items.First();
-
-            Assert.True(asxItem.Tags["Foo"] == "Bar");
-            Assert.True(asxItem.Path == null);
+            
+            Assert.True(!playlist.Items.Any());
         }
 
         [Fact]
         public void Deserialize_TitleIsParrsedAsExpected()
         {
-            // Arrange
+            string asxWithTitle_Foo =
+            @"
+                <asx>
+                  <title>Foo</title>
+                </asx>
+            ";
             var deserializer = new AsxDeserializer();
-
-            // Act
             var playlist = deserializer.Deserialize(asxWithTitle_Foo);
-
-            // Assert
+            
             Assert.True(playlist.Title == "Foo");
         }
 
         [Fact]
         public void Deserialize_VersionIsParrsedAsExpected()
         {
-            // Arrange
+            string asxWithVersion_Foo =
+            @"
+                <asx version=""Foo"">
+                </asx>
+            ";
             var deserializer = new AsxDeserializer();
-
-            // Act
             var playlist = deserializer.Deserialize(asxWithVersion_Foo);
 
-            // Assert
             Assert.True(playlist.Version == "Foo");
         }
 
         [Fact]
         public void Deserialize_RefIsParrsedAsExpected()
         {
-            // Arrange
+            string asxWithRef_Foo =
+            @"
+                <asx>
+                  <entry>
+                    <ref href=""Foo"" />
+                  </entry>
+                </asx>
+            ";
             var deserializer = new AsxDeserializer();
-
-            // Act
             var playlist = deserializer.Deserialize(asxWithRef_Foo);
 
-            // Assert
-            Assert.True(playlist.Items.Count() == 1);
             var asxItem = playlist.Items.First();
-
-            Assert.True(asxItem.Path == "Foo");
+            Assert.True(playlist.Items.Count() == 1 && asxItem.Path == "Foo");
         }
-
-        #region Xml Consts
-        private const string asxWithMeta_FooToBar =
-        @"
-            <asx>
-              <entry>
-                <param name=""Foo"" value=""Bar"" />
-              </entry>
-            </asx>
-        ";
-
-        private const string asxWithTitle_Foo =
-        @"
-            <asx>
-              <title>Foo</title>
-            </asx>
-        ";
-
-        private const string asxWithVersion_Foo =
-        @"
-            <asx version=""Foo"">
-            </asx>
-        ";
-
-        private const string asxWithRef_Foo =
-        @"
-            <asx>
-              <entry>
-                <ref href=""Foo"" />
-              </entry>
-            </asx>
-        ";
-        #endregion Xml Consts
     }
 }

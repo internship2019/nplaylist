@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using NPlaylist.Asx.AsxParts;
 
 namespace NPlaylist.Asx
 {
@@ -9,31 +10,33 @@ namespace NPlaylist.Asx
     {
         public AsxPlaylist Deserialize(string input)
         {
-            if (input == null)
-                throw new InvalidAsxFormatException();
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                throw new ArgumentNullException();
+            }
 
             var asxRawData = ConvertToAsxParts(input);
             return ConvertFromRawData(asxRawData);
         }
 
-        private AsxParts.Asx ConvertToAsxParts(string input)
+        private AsxBase ConvertToAsxParts(string input)
         {
-            var xmlSerializer = new XmlSerializer(typeof(AsxParts.Asx));
+            var xmlSerializer = new XmlSerializer(typeof(AsxBase));
 
             using (var reader = new StringReader(input))
             {
                 try
                 {
-                    return xmlSerializer.Deserialize(reader) as AsxParts.Asx;
+                    return xmlSerializer.Deserialize(reader) as AsxBase;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    throw new InvalidAsxFormatException();
+                    throw new FormatException();
                 }
             }
         }
 
-        private AsxPlaylist ConvertFromRawData(AsxParts.Asx asxRawData)
+        private AsxPlaylist ConvertFromRawData(AsxBase asxRawData)
         {
             var playlist = new AsxPlaylist();
 
@@ -43,20 +46,19 @@ namespace NPlaylist.Asx
             return playlist;
         }
 
-        private void AddHead(AsxPlaylist playlist, AsxParts.Asx asxRawData)
+        private void AddHead(AsxPlaylist playlist, AsxBase asxRawData)
         {
             playlist.Version = asxRawData.Version;
             playlist.Title = asxRawData.Title;
         }
 
-        private void AddItems(AsxPlaylist playlist, List<AsxParts.Entry> entries)
+        private void AddItems(AsxPlaylist playlist, IEnumerable<Entry> entries)
         {
             foreach (var item in entries)
             {
-                var asxItem = new AsxItem
+                var asxItem = new AsxItem(item.Ref?.Href)
                 {
                     Title = item.Title,
-                    Path = item.Ref?.Href,
                     Author = item.Author,
                     Copyright = item.Copyright
                 };
@@ -64,7 +66,6 @@ namespace NPlaylist.Asx
                 {
                     asxItem.Tags[itemTags.Name] = itemTags.Value;
                 }
-
                 playlist.Add(asxItem);
             }
         }

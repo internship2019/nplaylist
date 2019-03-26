@@ -4,67 +4,87 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
+using NPlaylist.Asx.AsxParts;
 
 namespace NPlaylist.Asx
 {
     public class AsxSerializer : IPlaylistSerializer<AsxPlaylist>
     {
+        private static XmlSerializer _xmlSerializer;
+
+        public AsxSerializer()
+        {
+            _xmlSerializer = new XmlSerializer(typeof(AsxBase));
+        }
+
         public string Serialize(AsxPlaylist playlist)
         {
-            if (playlist == null)
-                return String.Empty;
+            if (playlist == null) { 
+                return string.Empty;
+            }
             var asxObject = ConvertToAsxParts(playlist);
             return ConvertToRawData(asxObject);
         }
 
-        private AsxParts.Asx ConvertToAsxParts(AsxPlaylist playlist)
+        private AsxBase ConvertToAsxParts(AsxPlaylist playlist)
         {
-            var objectPlaylist = new AsxParts.Asx
+            var objectPlaylist = new AsxBase
             {
                 Version = playlist.Version,
                 Title = playlist.Title,
-                Entry = new List<AsxParts.Entry>()
+                Entry = GetAsxEntries(playlist)
             };
-            foreach (var item in playlist.Items)
-            {
-                var asxItem = new AsxParts.Entry
-                {
-                    Author = item.Author,
-                    Copyright = item.Copyright,
-                    Title = item.Title
-                };
-                asxItem.Ref = new AsxParts.Ref
-                {
-                    Href = item.Path
-                };
-                asxItem.Param = new List<AsxParts.ParamItem>();
-                foreach (var itemTags in item.Tags.Skip(4))
-                {
-                    asxItem.Param.Add(new AsxParts.ParamItem
-                    {
-                        Name = itemTags.Key,
-                        Value = itemTags.Value
-                    });
-                }
-                objectPlaylist.Entry.Add(asxItem);
-            }
+            
             return objectPlaylist;
         }
 
-        private string ConvertToRawData(AsxParts.Asx asxObject)
+        private List<Entry> GetAsxEntries(AsxPlaylist playlist)
         {
-            var xmlSerializer = new XmlSerializer(typeof(AsxParts.Asx));
-            using (var textWriter = new StringWriter())
+            return playlist.Items
+                .Where(item => !string.IsNullOrWhiteSpace(item.Path))
+                .Select(item => new Entry
+                {
+                    Author = item.Author,
+                    Copyright = item.Copyright,
+                    Title = item.Title,
+                    Ref = new Ref {Href = item.Path},
+                    Param = GetEntryTags(item)
+                })
+                .ToList();
+        }
+
+        private List<ParamItem> GetEntryTags(AsxItem item)
+        {
+            return item.Tags
+                .Where(t => t.Key != TagNames.Path && t.Key != TagNames.Author &&
+                            t.Key != TagNames.Copyright && t.Key != TagNames.Title)
+                .Select(itemTags => new ParamItem {Name = itemTags.Key, Value = itemTags.Value}).ToList();
+        }
+
+        private string ConvertToRawData(AsxBase asxObject)
+        {
+            var emptyNamespaces = new XmlSerializerNamespaces(new[] { XmlQualifiedName.Empty });
+            
+
+            var settings = new XmlWriterSettings
+            {
+                Indent = true,
+                OmitXmlDeclaration = true
+            };
+
+            using (var stream = new StringWriter())
+            using (var writer = XmlWriter.Create(stream, settings))
             {
                 try
                 {
-                    xmlSerializer.Serialize(textWriter, asxObject);
-                    return textWriter.ToString();
+                    _xmlSerializer.Serialize(writer, asxObject, emptyNamespaces);
+                    return stream.ToString();
                 }
-                catch(Exception e)
+                catch (Exception)
                 {
-                    throw new Exception(e.Message);
+                    throw new FormatException();
                 }
             }
         }
