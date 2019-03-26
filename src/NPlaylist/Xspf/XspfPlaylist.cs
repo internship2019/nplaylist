@@ -13,8 +13,8 @@ namespace NPlaylist.Xspf
 
         public XspfPlaylist()
         {
-            
         }
+
         public XspfPlaylist(IPlaylist playlist)
         {
             Tags = new Dictionary<string, string>(playlist.Tags);
