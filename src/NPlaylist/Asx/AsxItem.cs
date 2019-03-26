@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,14 @@ namespace NPlaylist.Asx
     {
         public AsxItem(string path) : base(path)
         {
+        }
+
+        public AsxItem(IPlaylistItem item) : base(path: item.Path)
+        {
+            foreach (var itemTags in item.Tags)
+            {
+                Tags[itemTags.Key] = itemTags.Value;
+            }
         }
 
         public string Title

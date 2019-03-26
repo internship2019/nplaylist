@@ -12,27 +12,28 @@ namespace NPlaylist.Tests.Asx
 {
     public class AsxDeserializerTests
     {
+        readonly AsxDeserializer deserializer;
+        
+        public AsxDeserializerTests()
+        {
+            deserializer = new AsxDeserializer();
+        }
+
         [Fact]
         public void Deserialize_NullInput_ThrowsException()
         {
-            var deserializer = new AsxDeserializer();
-
             Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize(null));
         }
 
         [Fact]
         public void Deserialize_EmptyInput_ThrowsException()
         {
-            var deserializer = new AsxDeserializer();
-
             Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize(string.Empty));
         }
 
         [Fact]
         public void Deserialize_IncorrectFormat_ThrowsException()
         {
-            var deserializer = new AsxDeserializer();
-
             Assert.Throws<FormatException>(() => deserializer.Deserialize("Foo"));
         }
 
@@ -43,7 +44,6 @@ namespace NPlaylist.Tests.Asx
             @"
                 <asx />
             ";
-            var deserializer = new AsxDeserializer();
             var playlist = deserializer.Deserialize(asxWithMeta_FooToBar);
             
             Assert.True(!playlist.Items.Any());
@@ -58,7 +58,6 @@ namespace NPlaylist.Tests.Asx
                   <title>Foo</title>
                 </asx>
             ";
-            var deserializer = new AsxDeserializer();
             var playlist = deserializer.Deserialize(asxWithTitle_Foo);
             
             Assert.True(playlist.Title == "Foo");
@@ -72,7 +71,6 @@ namespace NPlaylist.Tests.Asx
                 <asx version=""Foo"">
                 </asx>
             ";
-            var deserializer = new AsxDeserializer();
             var playlist = deserializer.Deserialize(asxWithVersion_Foo);
 
             Assert.True(playlist.Version == "Foo");
@@ -89,7 +87,6 @@ namespace NPlaylist.Tests.Asx
                   </entry>
                 </asx>
             ";
-            var deserializer = new AsxDeserializer();
             var playlist = deserializer.Deserialize(asxWithRef_Foo);
 
             var asxItem = playlist.Items.First();
