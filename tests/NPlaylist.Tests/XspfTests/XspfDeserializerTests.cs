@@ -10,7 +10,7 @@ namespace NPlaylist.Tests
         [Fact]
         public void Deserialize_InvalidPlaylistType_InvalidOperationException()
         {
-            var xspfDeserializer = new XspfPlaylistDesrializer();
+            var xspfDeserializer = new XspfDeserializer();
 
             Assert.Throws<FormatException>(() => xspfDeserializer.Deserialize("test string"));
         }
@@ -18,7 +18,7 @@ namespace NPlaylist.Tests
         [Fact]
         public void Deserialize_CorrectVersionParsing_True()
         {
-            var xspfDeserializer = new XspfPlaylistDesrializer();
+            var xspfDeserializer = new XspfDeserializer();
             string correctVersionTest =
                 "<playlist version = \"1\"  xmlns=\"http://xspf.org/ns/0/\" >  <trackList></trackList></playlist>";
 
@@ -29,7 +29,7 @@ namespace NPlaylist.Tests
         [Fact]
         public void Deserialize_CorectNumberOfItems_True()
         {
-            var xspfDeserializer = new XspfPlaylistDesrializer();
+            var xspfDeserializer = new XspfDeserializer();
             string correctCountOfItems =
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                 "<playlist  xmlns=\"http://xspf.org/ns/0/\" > " +
@@ -52,7 +52,7 @@ namespace NPlaylist.Tests
         [Fact]
         public void Deserialize_ItemParsedAsExpected_True()
         {
-            var xspfDeserializer = new XspfPlaylistDesrializer();
+            var xspfDeserializer = new XspfDeserializer();
             string correctItemParsing =
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                 "<playlist  xmlns=\"http://xspf.org/ns/0/\" > " +
@@ -71,7 +71,7 @@ namespace NPlaylist.Tests
         [Fact]
         public void Deserialize_NullInputAsParameter_ArgumentNullExceptionThrown()
         {
-            var xspfDeserializer = new XspfPlaylistDesrializer();
+            var xspfDeserializer = new XspfDeserializer();
            
             Assert.Throws<ArgumentNullException>(()=> xspfDeserializer.Deserialize(null));
         }

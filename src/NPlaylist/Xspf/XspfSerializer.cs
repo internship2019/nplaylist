@@ -8,7 +8,7 @@ using NPlaylist.Xspf.XspfHelper;
 
 namespace NPlaylist.Xspf
 {
-    public class XspfPlaylistSerializer : IPlaylistSerializer<XspfPlaylist>
+    public class XspfSerializer : IPlaylistSerializer<XspfPlaylist>
     {
         public string Serialize(XspfPlaylist playlist)
         {

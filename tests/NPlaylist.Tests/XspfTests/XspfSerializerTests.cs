@@ -10,7 +10,7 @@ namespace NPlaylist.Tests.XspfTests
         [Fact]
         public void Serialize_SerizlizerReturnsNotEmptyString_True()
         {
-            var xspfSerializer = new XspfPlaylistSerializer();
+            var xspfSerializer = new XspfSerializer();
             var xspfPlaylist = new XspfPlaylist
             {
                 Version = "1"
@@ -23,7 +23,7 @@ namespace NPlaylist.Tests.XspfTests
         [Fact]
         public void Serialize_NullInputAsParameter_ArgumentNullExceptionThrown()
         {
-            var xspfSerializer = new XspfPlaylistSerializer();
+            var xspfSerializer = new XspfSerializer();
 
             Assert.Throws<ArgumentNullException>(() => xspfSerializer.Serialize(null));
         }
@@ -32,7 +32,7 @@ namespace NPlaylist.Tests.XspfTests
         public void Serialize__SerializedPlaylistContainsTracklist_True()
         {
             var xspfPlaylist = new XspfPlaylist();
-            var xspfSerializer = new XspfPlaylistSerializer();
+            var xspfSerializer = new XspfSerializer();
             var actualResult = xspfSerializer.Serialize(xspfPlaylist);
 
             Assert.Contains("<trackList />", actualResult);
@@ -46,7 +46,7 @@ namespace NPlaylist.Tests.XspfTests
             {
                 Title = "test_element"
             });
-            var xspfSerializer = new XspfPlaylistSerializer();
+            var xspfSerializer = new XspfSerializer();
             var actualResult = xspfSerializer.Serialize(xspfPlaylist);
 
             Assert.Contains("<title>test_element</title>", actualResult);
