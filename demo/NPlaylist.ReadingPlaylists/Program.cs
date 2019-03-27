@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using NPlaylist.Pls;
 
 namespace NPlaylist.ReadingPlaylists
 {
