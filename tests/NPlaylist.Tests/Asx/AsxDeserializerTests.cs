@@ -12,45 +12,45 @@ namespace NPlaylist.Tests.Asx
 {
     public class AsxDeserializerTests
     {
-        [Fact]
-        public void Deserialize_NullInput_ThrowsException()
+        readonly AsxDeserializer deserializer;
+        
+        public AsxDeserializerTests()
         {
-            var deserializer = new AsxDeserializer();
+            deserializer = new AsxDeserializer();
+        }
 
+        [Fact]
+        public void Deserialize_NullInput_ThrowsArgumentException()
+        {
             Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize(null));
         }
 
         [Fact]
-        public void Deserialize_EmptyInput_ThrowsException()
+        public void Deserialize_EmptyInput_ThrowsArgumentException()
         {
-            var deserializer = new AsxDeserializer();
-
             Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize(string.Empty));
         }
 
         [Fact]
-        public void Deserialize_IncorrectFormat_ThrowsException()
+        public void Deserialize_IncorrectFormat_ThrowsFormatException()
         {
-            var deserializer = new AsxDeserializer();
-
             Assert.Throws<FormatException>(() => deserializer.Deserialize("Foo"));
         }
 
         [Fact]
-        public void Deserialize_TagIsParrsedAsExpected()
+        public void Deserialize_TagIsParsedAsExpected()
         {
             string asxWithMeta_FooToBar =
             @"
                 <asx />
             ";
-            var deserializer = new AsxDeserializer();
             var playlist = deserializer.Deserialize(asxWithMeta_FooToBar);
             
             Assert.True(!playlist.Items.Any());
         }
 
         [Fact]
-        public void Deserialize_TitleIsParrsedAsExpected()
+        public void Deserialize_TitleIsParsedAsExpected()
         {
             string asxWithTitle_Foo =
             @"
@@ -58,28 +58,26 @@ namespace NPlaylist.Tests.Asx
                   <title>Foo</title>
                 </asx>
             ";
-            var deserializer = new AsxDeserializer();
             var playlist = deserializer.Deserialize(asxWithTitle_Foo);
             
             Assert.True(playlist.Title == "Foo");
         }
 
         [Fact]
-        public void Deserialize_VersionIsParrsedAsExpected()
+        public void Deserialize_VersionIsParsedAsExpected()
         {
             string asxWithVersion_Foo =
             @"
                 <asx version=""Foo"">
                 </asx>
             ";
-            var deserializer = new AsxDeserializer();
             var playlist = deserializer.Deserialize(asxWithVersion_Foo);
 
             Assert.True(playlist.Version == "Foo");
         }
 
         [Fact]
-        public void Deserialize_RefIsParrsedAsExpected()
+        public void Deserialize_RefIsParsedAsExpected()
         {
             string asxWithRef_Foo =
             @"
@@ -89,7 +87,6 @@ namespace NPlaylist.Tests.Asx
                   </entry>
                 </asx>
             ";
-            var deserializer = new AsxDeserializer();
             var playlist = deserializer.Deserialize(asxWithRef_Foo);
 
             var asxItem = playlist.Items.First();
