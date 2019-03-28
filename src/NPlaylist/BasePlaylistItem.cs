@@ -17,5 +17,13 @@ namespace NPlaylist
             Tags = new Dictionary<string, string>();
             Path = path;
         }
+
+        protected BasePlaylistItem(IPlaylistItem item) : this(item.Path)
+        {
+            foreach (var itemTag in item.Tags)
+            {
+                Tags[itemTag.Key] = itemTag.Value;
+            }
+        }
     }
 }

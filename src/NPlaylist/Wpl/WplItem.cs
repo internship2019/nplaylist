@@ -11,5 +11,9 @@ namespace NPlaylist.Wpl
             get => Tags.TryGetValue(TagNames.TrackId, out var value) ? value : null;
             set => Tags[TagNames.TrackId] = value;
         }
+
+        public WplItem(IPlaylistItem item) : base(item)
+        {
+        }
     }
 }

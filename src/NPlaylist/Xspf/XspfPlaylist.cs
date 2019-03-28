@@ -15,17 +15,13 @@ namespace NPlaylist.Xspf
         {
         }
 
-        public XspfPlaylist(IPlaylist playlist)
+        public XspfPlaylist(IPlaylist playlist) : base(playlist)
         {
-            foreach (var playlistTag in playlist.Tags)
-            {
-                Tags[playlistTag.Key] = playlistTag.Value;
-            }
+        }
 
-            foreach (var item in playlist.GetItems())
-            {
-                Add(new XspfPlaylistItem(item));
-            }
+        protected override XspfPlaylistItem CreateItem(IPlaylistItem item)
+        {
+            return new XspfPlaylistItem(item);
         }
     }
 }

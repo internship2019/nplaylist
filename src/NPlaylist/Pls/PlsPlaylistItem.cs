@@ -15,5 +15,9 @@ namespace NPlaylist.Pls
         public PlsPlaylistItem(string path) : base(path)
         {
         }
+
+        public PlsPlaylistItem(IPlaylistItem item) : base(item.Path)
+        {
+        }
     }
 }

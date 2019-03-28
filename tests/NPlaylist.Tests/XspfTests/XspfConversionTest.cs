@@ -76,15 +76,15 @@ namespace NPlaylist.Tests.XspfTests
         {
             var playlist = Substitute.For<IPlaylist>();
             var item = Substitute.For<IPlaylistItem>();
-            var dictionary = new Dictionary<string,string>();
-            dictionary.Add(TagNames.TrackId,"testID");
-            item.Tags.Returns(dictionary);
+            var tags = new Dictionary<string,string>();
+            tags.Add("foo","testID");
+            item.Tags.Returns(tags);
             playlist.GetItems().Returns(new[] { item });
 
             var xspf = new XspfPlaylist(playlist);
 
-            var result = xspf.GetItems().First().Tags[TagNames.TrackId];
-            Assert.True(result.Equals("testID"));
+            var result = xspf.GetItems().First().Tags["foo"];
+            Assert.Equal(result,"testID");
         }
     }
 }

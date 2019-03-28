@@ -14,12 +14,8 @@ namespace NPlaylist.Xspf
         {
         }
 
-        public XspfPlaylistItem(IPlaylistItem item) : base(item.Path)
+        public XspfPlaylistItem(IPlaylistItem item) : base(item)
         {
-            foreach (var itemTag in item.Tags)
-            {
-                Tags[itemTag.Key] = itemTag.Value;
-            }
         }
     }
 }

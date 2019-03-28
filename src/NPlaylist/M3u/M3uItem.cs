@@ -11,6 +11,10 @@ namespace NPlaylist.M3u
             Duration = duration;
         }
 
+        public M3uItem(IPlaylistItem item) : base(item)
+        {
+        }
+
         public decimal Duration
         {
             get

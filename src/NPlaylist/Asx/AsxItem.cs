@@ -13,14 +13,9 @@ namespace NPlaylist.Asx
         {
         }
 
-        public AsxItem(IPlaylistItem item) : base(path: item.Path)
+        public AsxItem(IPlaylistItem item) : base(item)
         {
-            foreach (var itemTags in item.Tags)
-            {
-                Tags[itemTags.Key] = itemTags.Value;
-            }
         }
-
         public string Title
         {
             get => Tags.TryGetValue(TagNames.Title, out var value) ? value : null;
