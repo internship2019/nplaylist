@@ -11,13 +11,12 @@ namespace NPlaylist.Pls.Helper
 
         public static string RemoveMetaLines(string lines)
         {
-            return Regex.Replace(lines, @"\A(^.*(\r?\n?)+)|((\r?\n?)+(Version|Number).+)", "");
+            return Regex.Replace(lines, @"\A(^.*(\r?\n?)+)|((\r?\n?)+(Version|Number).+)|(\r?\n?)+\z", "");
         }
 
         public static bool InputHeaderValidation(string input)
         {
             return Regex.IsMatch(input, @"^(\[playlist\])(\r|\n|$)?");
         }
-
     }
 }

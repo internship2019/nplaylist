@@ -17,7 +17,7 @@ namespace NPlaylist.Pls
         private const string versionPattern = @"Version=(\d)";
 
         private static readonly Regex entryGroupRegex = new Regex(
-            $@"File\d+=({locationPattern})\n?"
+              $@"File\d+=({locationPattern})\n?"
             + $@"(?:Title\d+=({titlePattern})\n?)?"
             + $@"(?:Length\d+=({lengthPattern})\n?)?");
 
@@ -43,30 +43,26 @@ namespace NPlaylist.Pls
         private void AddPlaylistItems(PlsPlaylist playlist, string input)
         {
             input = StringUtils.RemoveMetaLines(input);
-            var items = ExtractItems(input);
 
-            foreach (var item in items)
+            foreach (var item in ExtractItems(input))
             {
                 playlist.Add(item);
             }
         }
 
-        private List<PlsItem> ExtractItems(string input)
+        private IEnumerable<PlsItem> ExtractItems(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                return new List<PlsItem>();
+                yield break;
             }
-            var items = new List<PlsItem>();
-            
+
             var lines = Regex.Split(StringUtils.RemoveEmptyLines(input), @"\n\n");
 
             foreach (var line in lines)
             {
-                items.Add(GetOneItem(line));
+                yield return GetOneItem(line);
             }
-
-            return items;
         }
 
         private PlsItem GetOneItem(string block)
@@ -82,22 +78,22 @@ namespace NPlaylist.Pls
             var length = match.Groups[3].Value;
 
             return new PlsItem(path)
-                {
-                    Title = title,
-                    Length = length
-                };
+            {
+                Title = title,
+                Length = length
+            };
         }
 
         private void ValidateInputFormat(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Null or empty input");
             }
 
             if (!StringUtils.InputHeaderValidation(input))
             {
-                throw new FormatException();
+                throw new FormatException("Missing format header");
             }
         }
     }

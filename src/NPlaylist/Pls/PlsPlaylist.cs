@@ -1,6 +1,6 @@
 namespace NPlaylist.Pls
 {
-    public class PlsPlaylist : BasePlaylist<PlsPlaylistItem>
+    public class PlsPlaylist : BasePlaylist<PlsItem>
     {
         public string Version
         {

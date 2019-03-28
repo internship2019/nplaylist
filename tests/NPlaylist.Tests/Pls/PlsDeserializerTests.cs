@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NPlaylist.Asx;
 using NPlaylist.Pls;
 using Xunit;
 
@@ -19,7 +18,7 @@ namespace NPlaylist.Tests.Pls
         }
 
         [Fact]
-        public void Deserialize_NullInput_ThrowsArgumentException()
+        public void Deserialize_NullInput_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => deserializer.Deserialize(null));
         }
@@ -46,7 +45,7 @@ namespace NPlaylist.Tests.Pls
         }
 
         [Fact]
-        public void Deserialize_OnlyHeaderIsParsedExpectingNullVersion()
+        public void Deserialize_OnlyHeaderIsParsedExpectingEmptyVersion()
         {
             string str = @"[playlist]";
             var playlist = deserializer.Deserialize(str);
@@ -101,6 +100,16 @@ Length1=-1";
             var playlist = deserializer.Deserialize(str);
 
             Assert.Equal("-1", playlist.Items.First().Length);
+        }
+
+        [Fact]
+        public void Deserialize_EntryWithUselessNewlines_ExtralinesAreIgnored()
+        {
+            string str = "[playlist]"+ Environment.NewLine + Environment.NewLine + Environment.NewLine +
+                         "File1=Foo" + Environment.NewLine + Environment.NewLine;
+            var playlist = deserializer.Deserialize(str);
+
+            Assert.Equal("Foo", playlist.Items.First().Path);
         }
     }
 }
