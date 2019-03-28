@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace NPlaylist.Wpl.WplParts
@@ -7,5 +9,19 @@ namespace NPlaylist.Wpl.WplParts
     {
         [XmlElement(ElementName = "seq")]
         public Sequence Sequence { get; set; }
+
+        public Body()
+        {
+        }
+
+        public Body(IEnumerable<WplItem> wplItems)
+        {
+            var media = wplItems.Select(x => new MediaItem(x));
+
+            Sequence = new Sequence
+            {
+                Media = media.ToList()
+            };
+        }
     }
 }

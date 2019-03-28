@@ -7,7 +7,7 @@ namespace NPlaylist.Tests.Wpl
 {
     public class WplDeserializerTests
     {
-        private WplDeserializer deserializer;
+        private readonly WplDeserializer deserializer;
 
         public WplDeserializerTests()
         {

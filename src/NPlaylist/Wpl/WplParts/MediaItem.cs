@@ -10,5 +10,15 @@ namespace NPlaylist.Wpl.WplParts
 
         [XmlAttribute(AttributeName = "tid")]
         public string Tid { get; set; }
+
+        public MediaItem()
+        {
+        }
+
+        public MediaItem(WplItem wplItem)
+        {
+            Src = wplItem.Path;
+            Tid = wplItem.TrackId;
+        }
     }
 }
