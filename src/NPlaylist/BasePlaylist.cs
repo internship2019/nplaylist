@@ -14,6 +14,19 @@ namespace NPlaylist
             _items = new List<T>();
         }
 
+        protected BasePlaylist(IPlaylist playlist) : this()
+        {
+            foreach (var playlistTag in playlist.Tags)
+            {
+                Tags[playlistTag.Key] = playlistTag.Value;
+            }
+
+            foreach (var item in playlist.GetItems())
+            {
+               Add(CreateItem(item));
+            }
+        }
+
         public IDictionary<string, string> Tags { get; }
 
         public IEnumerable<T> Items => _items;
@@ -32,5 +45,7 @@ namespace NPlaylist
         {
             _items.Remove(item);
         }
+
+        protected abstract T CreateItem(IPlaylistItem item);
     }
 }

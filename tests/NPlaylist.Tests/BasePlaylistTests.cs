@@ -7,33 +7,30 @@ namespace NPlaylist.Tests
 {
     public class BasePlaylistTests
     {
+        private readonly BasePlaylist<IPlaylistItem> playlist;
+        private readonly IPlaylistItem dummyItem;
+
+        public BasePlaylistTests()
+        {
+            playlist = Substitute.For < BasePlaylist<IPlaylistItem>>();
+            dummyItem = Substitute.For<IPlaylistItem>();
+        }
         [Fact]
         public void Add_Adds_ExpectedItem()
         {
-            // Arrange 
-            var dummyItem = Substitute.For<IPlaylistItem>();
-            var basePlaylist = Substitute.For<BasePlaylist<IPlaylistItem>>();
+            playlist.Add(dummyItem);
 
-            // Act 
-            basePlaylist.Add(dummyItem);
-
-            // Assert 
-            Assert.Contains(dummyItem, basePlaylist.GetItems());
+            Assert.Contains(dummyItem, playlist.GetItems());
         }
 
         [Fact]
         public void Remove_Removes_ExpectedItem()
         {
-            // Arrange 
-            var dummyItem = Substitute.For<IPlaylistItem>();
-            var basePlaylist = Substitute.For<BasePlaylist<IPlaylistItem>>();
-            basePlaylist.Add(dummyItem);
+            playlist.Add(dummyItem);
 
-            // Act 
-            basePlaylist.Remove(dummyItem);
+            playlist.Remove(dummyItem);
 
-            // Assert 
-            Assert.DoesNotContain(dummyItem, basePlaylist.GetItems());
+            Assert.DoesNotContain(dummyItem, playlist.GetItems());
         }
     }
 }

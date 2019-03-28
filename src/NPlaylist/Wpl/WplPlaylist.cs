@@ -19,5 +19,10 @@ namespace NPlaylist.Wpl
             get => Tags.TryGetValue(TagNames.Author, out var value) ? value : null;
             set => Tags[TagNames.Author] = value;
         }
+
+        protected override WplItem CreateItem(IPlaylistItem item)
+        {
+            return new WplItem(item);
+        }
     }
 }

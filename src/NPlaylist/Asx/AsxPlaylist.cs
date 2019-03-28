@@ -12,17 +12,8 @@ namespace NPlaylist.Asx
         {
         }
 
-        public AsxPlaylist(IPlaylist playlist)
+        public AsxPlaylist(IPlaylist playlist) : base(playlist)
         {
-            foreach (var playlistTag in playlist.Tags)
-            {
-                Tags[playlistTag.Key] = playlistTag.Value;
-            }
-
-            foreach (var playlistItem in playlist.GetItems())
-            {
-                Add(new AsxItem(playlistItem));
-            }
         }
 
         public string Title
@@ -35,6 +26,11 @@ namespace NPlaylist.Asx
         {
             get => Tags.TryGetValue(TagNames.Version, out var value) ? value : null;
             set => Tags[TagNames.Version] = value;
+        }
+
+        protected override AsxItem CreateItem(IPlaylistItem item) 
+        {
+            return new AsxItem(item);
         }
     }
 }
