@@ -1,6 +1,6 @@
 namespace NPlaylist.Pls
 {
-    public class PlsPlaylist : BasePlaylist<PlsPlaylistItem>
+    public class PlsPlaylist : BasePlaylist<PlsItem>
     {
         public string Version
         {
@@ -12,9 +12,9 @@ namespace NPlaylist.Pls
         {
         }
 
-        protected override PlsPlaylistItem CreateItem(IPlaylistItem item)
+        protected override PlsItem CreateItem(IPlaylistItem item)
         {
-            return new PlsPlaylistItem(item);
+            return new PlsItem(item);
         }
     }
 }

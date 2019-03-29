@@ -82,7 +82,7 @@ namespace NPlaylist.Tests.PlsTests
             {
                 Version = "2"
             };
-            pls.Add(new PlsPlaylistItem("test path")
+            pls.Add(new PlsItem("test path")
             {
                 Title = "test title"
             });
@@ -109,7 +109,7 @@ namespace NPlaylist.Tests.PlsTests
             {
                 Version = "2"
             };
-            pls.Add(new PlsPlaylistItem("test path")
+            pls.Add(new PlsItem("test path")
             {
                 Length = "sgsgsgsg"
             });
@@ -127,12 +127,12 @@ namespace NPlaylist.Tests.PlsTests
             {
                 Version = "2"
             };
-            pls.Add(new PlsPlaylistItem("test path")
+            pls.Add(new PlsItem("test path")
             {
                 Title = "test title",
                 Length = "sgsgsgsg"
             });
-            pls.Add(new PlsPlaylistItem("test path")
+            pls.Add(new PlsItem("test path")
             {
                 Title = "test title2",
                 Length = "10"
