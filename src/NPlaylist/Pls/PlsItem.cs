@@ -12,7 +12,7 @@ namespace NPlaylist.Pls
         {
         }
 
-        public PlsItem(IPlaylistItem item) : base(path: item.Path)
+        public PlsItem(IPlaylistItem item) : base(item)
         {
         }
 
