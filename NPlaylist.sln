@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPlaylist.ReadingPlaylists"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPlaylist.Converter", "NPlaylist.Converter\NPlaylist.Converter.csproj", "{638007EC-F816-48CD-9E8D-1F7283734D2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPlaylist.Player", "Nplaylist.Player\NPlaylist.Player.csproj", "{8F52459B-34BF-4764-8219-3A803B5ECDE6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,18 @@ Global
 		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Release|x64.Build.0 = Release|Any CPU
 		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Release|x86.ActiveCfg = Release|Any CPU
 		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Release|x86.Build.0 = Release|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Debug|x64.Build.0 = Debug|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Debug|x86.Build.0 = Debug|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Release|x64.ActiveCfg = Release|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Release|x64.Build.0 = Release|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Release|x86.ActiveCfg = Release|Any CPU
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +103,7 @@ Global
 		{4E57EDAA-F1C6-4986-9685-7A828493504A} = {4DAC08B8-5048-4CD7-B56C-982FBA22322F}
 		{0F235F0C-D1D8-4F56-AA43-8E72F4C3B50B} = {E519B0BE-166E-45BE-AC00-6E288AE1C28E}
 		{638007EC-F816-48CD-9E8D-1F7283734D2F} = {E519B0BE-166E-45BE-AC00-6E288AE1C28E}
+		{8F52459B-34BF-4764-8219-3A803B5ECDE6} = {E519B0BE-166E-45BE-AC00-6E288AE1C28E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F030DFFF-6EE4-40A3-9408-D82B4645F22E}
