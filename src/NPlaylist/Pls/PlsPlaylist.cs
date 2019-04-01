@@ -12,6 +12,10 @@ namespace NPlaylist.Pls
         {
         }
 
+        public PlsPlaylist(IPlaylist playlist) : base(playlist)
+        {
+        }
+
         protected override PlsItem CreateItem(IPlaylistItem item)
         {
             return new PlsItem(item);
