@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28621.142
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPlaylist", "src\NPlaylist\NPlaylist.csproj", "{1D294D2F-F8EE-488B-9FA5-F7EC2BAE7DE9}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{E519B0BE-166E-45BE-AC00-6E288AE1C28E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPlaylist.ReadingPlaylists", "demo\NPlaylist.ReadingPlaylists\NPlaylist.ReadingPlaylists.csproj", "{0F235F0C-D1D8-4F56-AA43-8E72F4C3B50B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPlaylist.Converter", "NPlaylist.Converter\NPlaylist.Converter.csproj", "{638007EC-F816-48CD-9E8D-1F7283734D2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,18 @@ Global
 		{0F235F0C-D1D8-4F56-AA43-8E72F4C3B50B}.Release|x64.Build.0 = Release|Any CPU
 		{0F235F0C-D1D8-4F56-AA43-8E72F4C3B50B}.Release|x86.ActiveCfg = Release|Any CPU
 		{0F235F0C-D1D8-4F56-AA43-8E72F4C3B50B}.Release|x86.Build.0 = Release|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Debug|x64.Build.0 = Debug|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Debug|x86.Build.0 = Debug|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Release|x64.ActiveCfg = Release|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Release|x64.Build.0 = Release|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Release|x86.ActiveCfg = Release|Any CPU
+		{638007EC-F816-48CD-9E8D-1F7283734D2F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,6 +88,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4E57EDAA-F1C6-4986-9685-7A828493504A} = {4DAC08B8-5048-4CD7-B56C-982FBA22322F}
 		{0F235F0C-D1D8-4F56-AA43-8E72F4C3B50B} = {E519B0BE-166E-45BE-AC00-6E288AE1C28E}
+		{638007EC-F816-48CD-9E8D-1F7283734D2F} = {E519B0BE-166E-45BE-AC00-6E288AE1C28E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F030DFFF-6EE4-40A3-9408-D82B4645F22E}

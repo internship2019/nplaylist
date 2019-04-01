@@ -20,6 +20,14 @@ namespace NPlaylist.Wpl
             set => Tags[TagNames.Author] = value;
         }
 
+        public WplPlaylist()
+        {
+        }
+
+        public WplPlaylist(IPlaylist playlist) : base(playlist)
+        {
+        }
+
         protected override WplItem CreateItem(IPlaylistItem item)
         {
             return new WplItem(item);
