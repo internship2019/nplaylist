@@ -47,6 +47,20 @@ namespace NPlaylist.Tests.M3u
             Assert.Throws<MediaFormatException>(() => deserializer.Deserialize(str));
         }
 
+        [Theory]
+        [InlineData("\n")]
+        [InlineData("\r\n")]
+        public void Deserialize_DifferentTypesOfNewLines_ParseAsExpected(string newLine)
+        {
+            var str =
+                  "#EXTM3U" + newLine
+                + "#EXTINF:42.42" + newLine
+                + "foo.bar" + newLine;
+
+            var output = deserializer.Deserialize(str);
+            Assert.NotEmpty(output.Items);
+        }
+
         [Fact]
         public void Deserialize_MediaWithNoPath_ThrowsException()
         {

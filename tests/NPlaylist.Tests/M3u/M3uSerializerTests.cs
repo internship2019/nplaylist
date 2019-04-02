@@ -6,6 +6,8 @@ namespace NPlaylist.Tests.M3u
 {
     public class M3uSerializerTests
     {
+        private const string newlinePattern = @"\r?\n";
+
         private readonly M3uSerializer serializer;
 
         public M3uSerializerTests()
@@ -35,8 +37,8 @@ namespace NPlaylist.Tests.M3u
             var output = serializer.Serialize(playlist);
 
             var pattern =
-                  @"#EXTINF:42.42\n"
-                + @"foo\n";
+                  @"#EXTINF:42.42" + newlinePattern
+                + @"foo" + newlinePattern;
 
             Assert.Matches(pattern, output);
         }
@@ -52,7 +54,7 @@ namespace NPlaylist.Tests.M3u
 
             var output = serializer.Serialize(playlist);
 
-            var pattern = @"#EXTINF:0\n";
+            var pattern = @"#EXTINF:0" + newlinePattern;
             Assert.Matches(pattern, output);
         }
 
@@ -67,7 +69,7 @@ namespace NPlaylist.Tests.M3u
 
             var output = serializer.Serialize(playlist);
 
-            var pattern = @"#EXTINF:0, Foo\n";
+            var pattern = @"#EXTINF:0, Foo" + newlinePattern;
             Assert.Matches(pattern, output);
         }
     }
