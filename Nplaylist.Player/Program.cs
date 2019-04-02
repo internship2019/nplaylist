@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace NPlaylist.Player
@@ -59,10 +60,15 @@ namespace NPlaylist.Player
         private static void PrintTrackPath(IPlaylist deserializedPlaylist)
         {
             var counter = 0;
-            Console.WriteLine("*****Tracklist:*****");
+            Console.WriteLine("\n*****Tracklist:*****\n");
             foreach (var playlistItem in deserializedPlaylist.GetItems())
             {
-                Console.WriteLine($"{counter}.{playlistItem.Path}");
+                if(!String.IsNullOrEmpty(playlistItem.Tags[TagNames.Title]))
+                Console.WriteLine($"{counter}.{playlistItem.Tags[TagNames.Title]}");
+                else
+                {
+                    Console.WriteLine($"{counter}.{playlistItem.Path}");
+                }
                 counter++;
             }
         }
