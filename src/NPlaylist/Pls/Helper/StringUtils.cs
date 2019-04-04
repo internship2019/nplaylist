@@ -4,9 +4,14 @@ namespace NPlaylist.Pls.Helper
 {
     internal static class StringUtils
     {
-        public static string RemoveEmptyLines(string lines)
+        public static string RemoveFileUnusedLines(string lines)
         {
             return Regex.Replace(lines, "(\r?\n)+File", "\n\nFile");
+        }
+
+        public static string RemoveExtraNewLines(string line)
+        {
+            return Regex.Replace(line, "(\r\n)+", "\n");
         }
 
         public static string RemoveMetaLines(string lines)

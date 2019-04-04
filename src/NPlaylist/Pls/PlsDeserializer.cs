@@ -57,7 +57,7 @@ namespace NPlaylist.Pls
                 yield break;
             }
 
-            var lines = Regex.Split(StringUtils.RemoveEmptyLines(input), @"\n\n");
+            var lines = Regex.Split(StringUtils.RemoveFileUnusedLines(input), @"\n\n");
 
             foreach (var line in lines)
             {
@@ -67,7 +67,7 @@ namespace NPlaylist.Pls
 
         private PlsItem GetOneItem(string block)
         {
-            var match = entryGroupRegex.Match(block);
+            var match = entryGroupRegex.Match(StringUtils.RemoveExtraNewLines(block));
             if (!match.Success)
             {
                 throw new FormatException();
