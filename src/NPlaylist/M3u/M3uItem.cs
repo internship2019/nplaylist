@@ -4,9 +4,7 @@ namespace NPlaylist.M3u
 {
     public class M3uItem : BasePlaylistItem
     {
-        private const decimal defaultDuration = 0;
-
-        public M3uItem(string path, decimal duration) : base(path)
+        public M3uItem(string path, decimal duration = 0) : base(path)
         {
             Duration = duration;
         }
@@ -21,10 +19,10 @@ namespace NPlaylist.M3u
             {
                 if (!Tags.TryGetValue(TagNames.Length, out var valueStr))
                 {
-                    return defaultDuration;
+                    return 0;
                 }
 
-                return decimal.TryParse(valueStr, out var decimalValue) ? decimalValue : defaultDuration;
+                return decimal.TryParse(valueStr, out var decimalValue) ? decimalValue : 0;
             }
 
             set => Tags[TagNames.Length] = value.ToString(CultureInfo.InvariantCulture);

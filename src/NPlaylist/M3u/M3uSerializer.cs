@@ -7,7 +7,12 @@ namespace NPlaylist.M3u
 {
     public class M3uSerializer : IPlaylistSerializer<M3uPlaylist>
     {
-        private const string newline = "\n";
+        private readonly string _newLine;
+        
+        public M3uSerializer(string newline = null)
+        {
+            this._newLine = (newline == null) ? Environment.NewLine : newline;
+        }
 
         public string Serialize(M3uPlaylist playlist)
         {
@@ -26,8 +31,8 @@ namespace NPlaylist.M3u
         private void AddHeader(StringBuilder sb)
         {
             sb.Append("#EXTM3U");
-            sb.Append(newline);
-            sb.Append(newline);
+            sb.Append(_newLine);
+            sb.Append(_newLine);
         }
 
         private void AddMediaItems(StringBuilder sb, IEnumerable<M3uItem> mediaItems)
@@ -35,7 +40,7 @@ namespace NPlaylist.M3u
             foreach (var item in mediaItems)
             {
                 AddMedia(sb, item);
-                sb.Append(newline);
+                sb.Append(_newLine);
             }
         }
 
@@ -61,13 +66,13 @@ namespace NPlaylist.M3u
             sb.Append(formatedDuration);
             sb.Append(formatedTitle);
 
-            sb.Append(newline);
+            sb.Append(_newLine);
         }
 
         private void AddMediaBody(StringBuilder sb, M3uItem item)
         {
             sb.Append(item.Path);
-            sb.Append(newline);
+            sb.Append(_newLine);
         }
     }
 }

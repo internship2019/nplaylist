@@ -12,6 +12,8 @@ namespace NPlaylist.M3u
         private const string decimalPattern = @"\d+(?:\.\d+)?";
         private const string titlePattern = @"(?:,(.+))";
         private const string pathPattern = ".+";
+        private const string newlinePattern = @"\r?\n";
+
         /*
          * Groups:
          *  1. Decimal duration
@@ -19,7 +21,7 @@ namespace NPlaylist.M3u
          *  3. Path       
         */
         private static readonly Regex mediaGroupingRgx = new Regex(
-              $"^#EXTINF:({decimalPattern}){titlePattern}?\n"
+              $"^#EXTINF:({decimalPattern}){titlePattern}?{newlinePattern}"
             + $"({pathPattern})");
 
         public M3uPlaylist Deserialize(string input)
@@ -61,7 +63,7 @@ namespace NPlaylist.M3u
         */
         private IEnumerable<M3uItem> ExtractItems(string input)
         {
-            const string twoLinesPattern = ".*\n.*\n";
+            var twoLinesPattern = $".*{newlinePattern}.*{newlinePattern}";
             foreach (var match in Regex.Matches(StringUtils.RemoveTheFirstLine(input), twoLinesPattern))
             {
                 yield return DeserializeMedia(match.ToString());
@@ -86,7 +88,7 @@ namespace NPlaylist.M3u
 
         private bool InputStartsWithM3uHeader(string input)
         {
-            return Regex.IsMatch(input, "^#EXTM3U8?(\n|$)");
+            return Regex.IsMatch(input, $"^#EXTM3U8?({newlinePattern}|$)");
         }
 
         private M3uItem DeserializeMedia(string mediaStr)
@@ -112,7 +114,7 @@ namespace NPlaylist.M3u
             const int headerNbOfLines = 1;
             const int mediaNbOfLines = 2;
 
-            var actualNbofLines = Regex.Matches(input, "\n").Count;
+            var actualNbofLines = Regex.Matches(input, newlinePattern).Count;
             var expectedNbOfLines = headerNbOfLines + (nbOfMediaItems * mediaNbOfLines);
 
             return expectedNbOfLines == actualNbofLines;
