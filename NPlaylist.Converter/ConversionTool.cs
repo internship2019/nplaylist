@@ -11,61 +11,32 @@ namespace NPlaylist.Converter
 {
     public static class ConversionTool
     {
-        public static void Convert(string initialPlaylistPath, string convertedPlaylistPath, Format outputFormat)
+        public static void Convert(
+            TextReader inStream,
+            TextWriter outStream,
+            Format inputFormat,
+            Format outputFormat)
         {
-            if (string.IsNullOrWhiteSpace(initialPlaylistPath))
+            if (inStream == null)
             {
-                throw new ArgumentNullException(nameof(initialPlaylistPath));
+                throw new ArgumentNullException(nameof(inStream));
             }
 
-            if (string.IsNullOrWhiteSpace(convertedPlaylistPath))
+            if (outStream == null)
             {
-                throw new ArgumentNullException(nameof(convertedPlaylistPath));
+                throw new ArgumentNullException(nameof(outStream));
             }
 
-            if (outputFormat == Format.Unknown)
-            {
-                throw new ArgumentException("Can't convert to unknown format");
-            }
-
-            var inputFormat = GetFormat(initialPlaylistPath);
             var deserializer = GetDesrializer(inputFormat);
-            var deserializedPlaylist = ReadPlaylist(initialPlaylistPath, deserializer);
+            var deserializedPlaylist = deserializer.Deserialize(inStream.ReadToEnd());
             var serializedPlaylist = SerializePlaylist(deserializedPlaylist, outputFormat);
 
-            WritePlaylistToFile(serializedPlaylist, convertedPlaylistPath);
+            outStream.Write(serializedPlaylist);
         }
 
-        private static Format GetFormat(string path)
+        private static IPlaylistDeserializer<IPlaylist> GetDesrializer(Format format)
         {
-            var fileFormat = GetFormatByExtension(path);
-            if (fileFormat == Format.Unknown)
-            {
-                fileFormat = TryGetFormatByFirstLines(path);
-            }
-
-            return fileFormat;
-        }
-
-        private static IPlaylist ReadPlaylist(string path, IPlaylistDeserializer<IPlaylist> deserializer)
-        {
-            using (var streamReader = new StreamReader(path))
-            {
-                return deserializer.Deserialize(streamReader.ReadToEnd());
-            }
-        }
-
-        private static void WritePlaylistToFile(string playlist, string path)
-        {
-            using (var streamWriter = new StreamWriter(path))
-            {
-                streamWriter.Write(playlist);
-            }
-        }
-
-        private static IPlaylistDeserializer<IPlaylist> GetDesrializer(Format fileFormat)
-        {
-            switch (fileFormat)
+            switch (format)
             {
                 case Format.XSPF:
                     return new XspfDeserializer();
@@ -75,8 +46,10 @@ namespace NPlaylist.Converter
                     return new AsxDeserializer();
                 case Format.PLS:
                     return new PlsDeserializer();
-                default:
+                case Format.M3U:
                     return new M3uDeserializer();
+                default:
+                    throw new ArgumentException($"{format}: Unsupported format");
             }
         }
 
@@ -88,18 +61,22 @@ namespace NPlaylist.Converter
                     var xspfSerializer = new XspfSerializer();
                     var xspfPl = new XspfPlaylist(playlist);
                     return xspfSerializer.Serialize(xspfPl);
+                
                 case Format.WPL:
                     var wplSerializer = new WplSerializer();
                     var wplPlaylist = new WplPlaylist(playlist);
                     return wplSerializer.Serialize(wplPlaylist);
+                
                 case Format.M3U:
                     var m3USerializer = new M3uSerializer();
                     var m3UPlaylist = new M3uPlaylist(playlist);
                     return m3USerializer.Serialize(m3UPlaylist);
+                
                 case Format.ASX:
                     var asxSerializer = new AsxSerializer();
                     var asxPlaylist = new AsxPlaylist(playlist);
                     return asxSerializer.Serialize(asxPlaylist);
+                
                 case Format.PLS:
                     var plsSerializer = new PlsSerializer();
                     var plsPlaylist = new PlsPlaylist(playlist);

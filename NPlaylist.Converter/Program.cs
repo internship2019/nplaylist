@@ -1,65 +1,35 @@
 using System;
+using CommandLine;
 
 namespace NPlaylist.Converter
 {
     class Program
     {
-        static int Main(string[] args)
+        public class ArgOptions
         {
-            if (args.Length == 0 || args[0] == "-h" || args[0] == "--help")
-            {
-                PrintHelp();
-                return 0;
-            }
+            [Option("from_format", Required = true, HelpText = "Format to convert from")]
+            public Format InputFormat { get; set; }
 
-            if (args.Length != 3)
-            {
-                Console.Error.WriteLine("Wrong number of arguments");
-                return -1;
-            }
+            [Option("to_format", Required = true, HelpText = "Format to convert to")]
+            public Format OutputFormat { get; set; }
+        }
 
-            var format = GetFormat(args[2]);
-            if (format == Format.Unknown)
-            {
-                Console.Error.WriteLine($"Unsupported format: {args[2].ToLower()}");
-                return -1;
-            }
+        static void Main(string[] args)
+        {
+            Parser.Default
+                .ParseArguments<ArgOptions>(args)
+                .WithParsed(options => WithValidOptions(options));
+        }
 
+        private static void WithValidOptions(ArgOptions argOptions)
+        {
             try
             {
-                ConversionTool.Convert(args[0], args[1], format);
+                ConversionTool.Convert(Console.In, Console.Out, argOptions.InputFormat, argOptions.OutputFormat);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.Error.WriteLine(ex.Message);
-                return -1;
-            }
-
-            return 0;
-        }
-
-        private static void PrintHelp()
-        {
-            Console.WriteLine("Arguments: <source file> <destination file> <format>");
-            Console.WriteLine("Supported formats: wpl, xspf, pls, m3u, asx");
-        }
-
-        public static Format GetFormat(string input)
-        {
-            switch (input.ToLower())
-            {
-                case "wpl":
-                    return Format.WPL;
-                case "asx":
-                    return Format.ASX;
-                case "m3u":
-                    return Format.M3U;
-                case "xspf":
-                    return Format.XSPF;
-                case "pls":
-                    return Format.PLS;
-                default:
-                    return Format.Unknown;
+                Console.Error.WriteLine($"[Failed]: {e.Message}");
             }
         }
     }
