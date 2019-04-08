@@ -9,115 +9,86 @@ namespace NPlaylist.M3u
 {
     public class M3uDeserializer : IPlaylistDeserializer<M3uPlaylist>
     {
-        private const string decimalPattern = @"\d+(?:\.\d+)?";
-        private const string titlePattern = @"(?:,(.+))";
-        private const string pathPattern = ".+";
-        private const string newlinePattern = @"\r?\n";
-
-        /*
-         * Groups:
-         *  1. Decimal duration
-         *  2. Optional Title
-         *  3. Path       
-        */
-        private static readonly Regex mediaGroupingRgx = new Regex(
-              $"^#EXTINF:({decimalPattern}){titlePattern}?{newlinePattern}"
-            + $"({pathPattern})");
-
         public M3uPlaylist Deserialize(string input)
-        {
-            ValidateInput(input);
-            input = PreprocessInput(input);
-
-            var playlist = new M3uPlaylist();
-            AddMediaItems(playlist, ExtractItems(input));
-
-            PostValidateInput(input, playlist);
-            return playlist;
-        }
-
-        private void ValidateInput(string input)
         {
             if (input == null)
             {
                 throw new ArgumentNullException(nameof(input));
             }
 
-            if (!InputStartsWithM3uHeader(input))
+            input = TransformStringToUseUnixNewlines(input);
+
+            if (!M3uRegexConsts.startsWithHeaderRegex.IsMatch(input))
             {
                 throw new FormatException();
             }
+
+            var m3uPlaylist = new M3uPlaylist();
+            m3uPlaylist.AddRange(ExtractMediaItems(input));
+
+            return m3uPlaylist;
         }
 
-        /*
-         * To ease the implementation, the input must have a trailing newline.
-        */
-        private string PreprocessInput(string input)
+        private string TransformStringToUseUnixNewlines(string str)
         {
-            return StringUtils.RemoveExtraNewlines(input + '\n');
+            return str.Replace("\r\n", "\n");
         }
 
-        /*
-         * Break the input into groups of 2 lines.
-         * Extract the media items from these groups.
-        */
-        private IEnumerable<M3uItem> ExtractItems(string input)
+        private IEnumerable<M3uItem> ExtractMediaItems(string mediaItemsPart)
         {
-            var twoLinesPattern = $".*{newlinePattern}.*{newlinePattern}";
-            foreach (var match in Regex.Matches(StringUtils.RemoveTheFirstLine(input), twoLinesPattern))
+            int mediaIndex = 0;
+
+            foreach (Match rawMediaMatch in M3uRegexConsts.rawMediaRegex.Matches(mediaItemsPart))
             {
-                yield return DeserializeMedia(match.ToString());
+                mediaIndex++;
+
+                var mediaMatch = M3uRegexConsts.mediaRegex.Match(rawMediaMatch.Value);
+                if (!mediaMatch.Success)
+                {
+                    throw new MediaFormatException($"Media {mediaIndex} is not well formated");
+                }
+
+                yield return MediaMatchToM3uItem(mediaMatch, mediaIndex);
             }
         }
 
-        private void AddMediaItems(M3uPlaylist playlist, IEnumerable<M3uItem> items)
+        private M3uItem MediaMatchToM3uItem(Match mediaMatch, int mediaIndex)
         {
-            foreach (var item in items)
+            return new M3uItem(ExtractPath(mediaMatch, mediaIndex))
             {
-                playlist.Add(item);
-            }
-        }
-
-        private void PostValidateInput(string input, M3uPlaylist playlist)
-        {
-            if (!HasTheExpectedNbOfLines(input, playlist.Items.Count()))
-            {
-                throw new FormatException("Unexpected number of lines.");
-            }
-        }
-
-        private bool InputStartsWithM3uHeader(string input)
-        {
-            return Regex.IsMatch(input, $"^#EXTM3U8?({newlinePattern}|$)");
-        }
-
-        private M3uItem DeserializeMedia(string mediaStr)
-        {
-            var match = mediaGroupingRgx.Match(mediaStr);
-            if (!match.Success)
-            {
-                throw new MediaFormatException();
-            }
-
-            var duration = decimal.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture);
-            var title = match.Groups[2].Value.Trim();
-            var path = match.Groups[3].Value;
-
-            return new M3uItem(path, duration)
-            {
-                Title = title
+                Duration = ExtractDuration(mediaMatch),
+                Title = ExtractTitle(mediaMatch)
             };
         }
 
-        private bool HasTheExpectedNbOfLines(string input, int nbOfMediaItems)
+        private string ExtractPath(Match mediaMatch, int mediaIndex)
         {
-            const int headerNbOfLines = 1;
-            const int mediaNbOfLines = 2;
+            var path = mediaMatch.Groups["path"].Value;
 
-            var actualNbofLines = Regex.Matches(input, newlinePattern).Count;
-            var expectedNbOfLines = headerNbOfLines + (nbOfMediaItems * mediaNbOfLines);
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new MediaFormatException($"Media {mediaIndex} does not contain a valid path");
+            }
 
-            return expectedNbOfLines == actualNbofLines;
+            return path;
+        }
+
+        private decimal ExtractDuration(Match mediaMatch)
+        {
+            var durationStr = mediaMatch.Groups["duration"].Value;
+            return decimal.Parse(durationStr, CultureInfo.InvariantCulture);
+        }
+
+        private string ExtractTitle(Match mediaMatch)
+        {
+            var title = mediaMatch.Groups["title"].Value;
+
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                return null;
+            }
+
+            return title;
         }
     }
 }

@@ -36,26 +36,15 @@ namespace NPlaylist.Tests.M3u
             Assert.Empty(output.Items);
         }
 
-        [Fact]
-        public void Deserialize_TrashMediaTag_ThrowsException()
-        {
-            var str =
-                  "#EXTM3U\n"
-                + "#Foo:42\n"
-                + "foo.bar\n";
-
-            Assert.Throws<MediaFormatException>(() => deserializer.Deserialize(str));
-        }
-
         [Theory]
         [InlineData("\n")]
         [InlineData("\r\n")]
         public void Deserialize_DifferentTypesOfNewLines_ParseAsExpected(string newLine)
         {
             var str =
-                  "#EXTM3U" + newLine
-                + "#EXTINF:42.42" + newLine
-                + "foo.bar" + newLine;
+                  "#EXTM3U"         + newLine + newLine
+                + "#EXTINF:42.42"   + newLine
+                + "foo.bar"         + newLine + newLine;
 
             var output = deserializer.Deserialize(str);
             Assert.NotEmpty(output.Items);
@@ -66,9 +55,9 @@ namespace NPlaylist.Tests.M3u
         {
             var str =
                   "#EXTM3U\n"
-                + "#Foo:42\n";
+                + "#EXTINF:42\n";
 
-            Assert.Throws<FormatException>(() => deserializer.Deserialize(str));
+            Assert.Throws<MediaFormatException>(() => deserializer.Deserialize(str));
         }
 
         [Fact]
@@ -103,17 +92,6 @@ namespace NPlaylist.Tests.M3u
 
             var output = deserializer.Deserialize(str);
             Assert.Equal(42.42m, output.Items.First().Duration);
-        }
-
-        [Fact]
-        public void Deserialize_MediaWithMissingTitle_ThrowsException()
-        {
-            var str =
-                  "#EXTM3U\n"
-                + "#EXTINF:42,\n"
-                + "foo.bar\n";
-
-            Assert.Throws<MediaFormatException>(() => deserializer.Deserialize(str));
         }
 
         [Fact]
@@ -167,7 +145,7 @@ namespace NPlaylist.Tests.M3u
         }
 
         [Fact]
-        public void Deserialize_MeidaTitleContainsComma_TitleExtracteWithComma()
+        public void Deserialize_MeidaTitleContainsComma_TitleExtractedWithComma()
         {
             var str =
                   "#EXTM3U\n"
@@ -176,6 +154,22 @@ namespace NPlaylist.Tests.M3u
 
             var output = deserializer.Deserialize(str);
             Assert.Equal("Foo, Bar", output.Items.First().Title);
+        }
+
+        [Fact]
+        public void Deserialize_PlaylistContainsExtraStuff_IgnoreThatStuff()
+        {
+            var str =
+                  "#EXTM3U\n"
+
+                + "#EXT-X-TARGETDURATION:42\n"
+                + "Foo\n"
+
+                + "#EXTINF:42\n"
+                + "foo/path\n";
+
+            var output = deserializer.Deserialize(str);
+            Assert.NotEmpty(output.Items);
         }
     }
 }
