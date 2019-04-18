@@ -26,15 +26,6 @@ indent_size = 2
 [*.json]
 indent_size = 2
 
-# PowerShell files
-[*.ps1]
-indent_size = 2
-
-# Shell script files
-[*.sh]
-end_of_line = lf
-indent_size = 2
-
 # DotNet code style settings:
 [*.{cs,vb}]
 # Sort using and Import directives with System.* appearing first
