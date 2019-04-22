@@ -1,6 +1,7 @@
 # NPlaylist
 
 [![Build status](https://ci.appveyor.com/api/projects/status/x5nfnkd2vawcmi89/branch/master?svg=true)](https://ci.appveyor.com/project/aivascu/nplaylist/branch/master)
+[![Build Status](https://enaivascu.visualstudio.com/NPlaylist/_apis/build/status/nplaylist-lib-ci?branchName=master)](https://enaivascu.visualstudio.com/NPlaylist/_build/latest?definitionId=4&branchName=master)
 [![Code quality](https://www.codefactor.io/repository/github/nplaylist/nplaylist/badge?style=flat)](https://www.codefactor.io/repository/github/nplaylist/nplaylist)
 
 ## Contents
